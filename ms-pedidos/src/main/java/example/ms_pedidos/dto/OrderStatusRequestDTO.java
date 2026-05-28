@@ -1,13 +1,8 @@
 package example.ms_pedidos.dto;
 
-
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 import example.ms_pedidos.model.OrderStatus;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,13 +11,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class OrderResponseDTO {
+public class OrderStatusRequestDTO {
 
-    private Long id;
-    private Long userId;
-    private LocalDateTime orderDate;
-    private BigDecimal total;
+    @NotNull(message = "El estado del pedido es obligatorio")
     private OrderStatus status;
-    private Boolean active;
 }
