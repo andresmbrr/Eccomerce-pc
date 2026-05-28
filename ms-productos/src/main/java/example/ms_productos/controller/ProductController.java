@@ -1,5 +1,4 @@
 package example.ms_productos.controller;
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -33,26 +32,40 @@ public class ProductController {
     createProduct(
             @Valid @RequestBody ProductRequestDTO dto){
 
-        log.info("POST /api/products");
+        log.info("POST /api/productos - Creando producto: {}", dto.getName());
+
+        ProductResponseDTO response = service.createProduct(dto);
+
+        log.info("Producto creado correctamente con ID: {}", response.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(service.createProduct(dto));
+                .body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<ProductResponseDTO>>
     getAllProducts(){
 
-        return ResponseEntity.ok(
-                service.getAllProducts());
+        log.info("GET /api/productos - Listando productos");
+
+        List<ProductResponseDTO> products = service.getAllProducts();
+
+        log.info("Cantidad de productos encontrados: {}", products.size());
+
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDTO>
     getProductById(@PathVariable Long id){
 
-        return ResponseEntity.ok(
-                service.getProductById(id));
+        log.info("GET /api/productos/{} - Buscando producto por ID", id);
+
+        ProductResponseDTO response = service.getProductById(id);
+
+        log.info("Producto encontrado: {}", response.getName());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/category/{category}")
@@ -60,8 +73,14 @@ public class ProductController {
     getProductsByCategory(
             @PathVariable String category){
 
-        return ResponseEntity.ok(
-                service.getProductsByCategory(category));
+        log.info("GET /api/productos/category/{} - Buscando productos por categoría", category);
+
+        List<ProductResponseDTO> products =
+                service.getProductsByCategory(category);
+
+        log.info("Productos encontrados en categoría {}: {}", category, products.size());
+
+        return ResponseEntity.ok(products);
     }
 
     @PutMapping("/{id}")
@@ -70,15 +89,25 @@ public class ProductController {
             @PathVariable Long id,
             @Valid @RequestBody ProductRequestDTO dto){
 
-        return ResponseEntity.ok(
-                service.updateProduct(id, dto));
+        log.info("PUT /api/productos/{} - Actualizando producto", id);
+
+        ProductResponseDTO response =
+                service.updateProduct(id, dto);
+
+        log.info("Producto actualizado correctamente con ID: {}", response.getId());
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
     deleteProduct(@PathVariable Long id){
 
+        log.info("DELETE /api/productos/{} - Eliminando producto lógico", id);
+
         service.deleteProduct(id);
+
+        log.info("Producto eliminado correctamente con ID: {}", id);
 
         return ResponseEntity.noContent().build();
     }

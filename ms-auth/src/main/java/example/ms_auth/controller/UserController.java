@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated; // <-- IMPORTANTE
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,61 +24,70 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/auth/register")
+@RequestMapping("/api/auth") // <-- RECOMENDACIÓN: Dejar la ruta base más genérica
 @RequiredArgsConstructor
+@Validated // <-- IMPORTANTE: Permite validar respuestas (LoginResponseDTO) si así lo deseas
 @Slf4j
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(
-            @Valid @RequestBody UserRequestDTO dto){
+    // 1. Registro de usuarios (Se usa /api/auth/register)
+    @PostMapping("/register") 
+    public ResponseEntity<@Valid UserResponseDTO> createUser(
+        @Valid @RequestBody UserRequestDTO dto) {
 
-        log.info("POST /users ejecutado");
+        log.info("POST /api/auth/register ejecutado");
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userService.createUser(dto));
     }
 
+    // 2. Login de usuarios (¡Aquí faltaba el @Valid!)
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(
-         @RequestBody LoginRequestDTO dto) {
+    public ResponseEntity<@Valid LoginResponseDTO> login(
+            @Valid @RequestBody LoginRequestDTO dto) { 
+        
+        log.info("POST /api/auth/login ejecutado");
 
         return ResponseEntity.ok(userService.login(dto));
-}
+    }
 
-    @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers(){
+    // 3. Obtener todos los usuarios
+    @GetMapping("/users")
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
 
-        log.info("GET /users ejecutado");
+        log.info("GET /api/auth/users ejecutado");
 
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @GetMapping("/{id}")
+    // 4. Obtener usuario por ID
+    @GetMapping("/users/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(
-            @PathVariable Long id){
+            @PathVariable Long id) {
 
-        log.info("GET /users/{} ejecutado", id);
+        log.info("GET /api/auth/users/{} ejecutado", id);
 
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @PutMapping("/{id}")
+    // 5. Actualizar usuario
+    @PutMapping("/users/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,
-            @Valid @RequestBody UserRequestDTO dto){
+            @Valid @RequestBody UserRequestDTO dto) {
 
-        log.info("PUT /users/{} ejecutado", id);
+        log.info("PUT /api/auth/users/{} ejecutado", id);
 
         return ResponseEntity.ok(userService.updateUser(id, dto));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+    // 6. Eliminar usuario
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 
-        log.info("DELETE /users/{} ejecutado", id);
+        log.info("DELETE /api/auth/users/{} ejecutado", id);
 
         userService.deleteUser(id);
 

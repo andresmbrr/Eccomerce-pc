@@ -16,17 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ProductServiceImpl
-        implements ProductService {
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
 
     @Override
-    public ProductResponseDTO createProduct(
-            ProductRequestDTO dto) {
+    public ProductResponseDTO createProduct(ProductRequestDTO dto) {
 
-        log.info("Creando producto {}",
-                dto.getName());
+        log.info("Creando producto: {}", dto.getName());
 
         Product product = Product.builder()
                 .name(dto.getName())
@@ -38,59 +35,80 @@ public class ProductServiceImpl
 
         Product saved = repository.save(product);
 
+        log.info("Producto creado correctamente con ID: {}", saved.getId());
+
         return mapToDTO(saved);
     }
 
     @Override
     public List<ProductResponseDTO> getAllProducts() {
 
-        log.info("Listando productos");
+        log.info("Listando todos los productos");
 
-        return repository.findAll()
+        List<ProductResponseDTO> products = repository.findAll()
                 .stream()
                 .map(this::mapToDTO)
                 .toList();
+
+        log.info("Total de productos encontrados: {}", products.size());
+
+        return products;
     }
 
     @Override
-    public ProductResponseDTO getProductById(
-            Long id) {
+    public ProductResponseDTO getProductById(Long id) {
+
+        log.info("Buscando producto con ID: {}", id);
 
         Product product = repository.findById(id)
-                .orElseThrow(() ->
-                        new ProductNotFoundException(
-                                "Producto no encontrado"));
+                .orElseThrow(() -> {
+                    log.warn("Producto no encontrado con ID: {}", id);
+                    return new ProductNotFoundException("Producto no encontrado con ID: " + id);
+                });
+
+        log.info("Producto encontrado con ID: {}", product.getId());
 
         return mapToDTO(product);
     }
 
     @Override
-    public List<ProductResponseDTO>
-    getProductsByCategory(String category) {
+    public List<ProductResponseDTO> getProductsByCategory(String category) {
 
-        return repository.findByCategory(category)
+        log.info("Buscando productos por categoría: {}", category);
+
+        List<ProductResponseDTO> products = repository.findByCategory(category)
                 .stream()
                 .map(this::mapToDTO)
                 .toList();
+
+        log.info("Productos encontrados en categoría {}: {}", category, products.size());
+
+        return products;
     }
 
     @Override
-    public ProductResponseDTO updateProduct(
-            Long id,
-            ProductRequestDTO dto) {
+    public ProductResponseDTO updateProduct(Long id, ProductRequestDTO dto) {
+
+        log.info("Actualizando producto con ID: {}", id);
 
         Product product = repository.findById(id)
-                .orElseThrow(() ->
-                        new ProductNotFoundException(
-                                "Producto no encontrado"));
+                .orElseThrow(() -> {
+                    log.warn("No se pudo actualizar. Producto no encontrado con ID: {}", id);
+                    return new ProductNotFoundException("Producto no encontrado con ID: " + id);
+                });
 
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
         product.setCategory(dto.getCategory());
-        product.setActive(dto.getActive());
+
+        if (dto.getActive() != null) {
+            product.setActive(dto.getActive());
+        }
 
         Product updated = repository.save(product);
+
+        log.info("Producto actualizado correctamente con ID: {}", updated.getId());
 
         return mapToDTO(updated);
     }
@@ -98,16 +116,21 @@ public class ProductServiceImpl
     @Override
     public void deleteProduct(Long id) {
 
-        Product product = repository.findById(id)
-                .orElseThrow(() ->
-                        new ProductNotFoundException(
-                                "Producto no encontrado"));
+        log.info("Eliminando lógicamente producto con ID: {}", id);
 
-        repository.delete(product);
+        Product product = repository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("No se pudo eliminar. Producto no encontrado con ID: {}", id);
+                    return new ProductNotFoundException("Producto no encontrado con ID: " + id);
+                });
+
+        product.setActive(false);
+        repository.save(product);
+
+        log.info("Producto desactivado correctamente con ID: {}", id);
     }
 
-    private ProductResponseDTO mapToDTO(
-            Product product){
+    private ProductResponseDTO mapToDTO(Product product) {
 
         return ProductResponseDTO.builder()
                 .id(product.getId())
