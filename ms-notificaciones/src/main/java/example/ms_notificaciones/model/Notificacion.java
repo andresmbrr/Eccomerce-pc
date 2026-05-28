@@ -1,4 +1,5 @@
 package example.ms_notificaciones.model;
+
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -29,13 +30,13 @@ public class Notificacion {
     @Column(nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 120)
     private String titulo;
 
     @Column(nullable = false, length = 500)
     private String mensaje;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String tipo;
 
     @Column(nullable = false)
@@ -43,4 +44,7 @@ public class Notificacion {
 
     @Column(nullable = false)
     private LocalDateTime fechaEnvio;
+
+    @Column(nullable = false)
+    private Boolean active;
 }

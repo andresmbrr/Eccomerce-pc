@@ -31,23 +31,42 @@ public class NotificacionController {
     @PostMapping
     public ResponseEntity<NotificacionResponseDTO>
     crearNotificacion(
-            @Valid @RequestBody NotificacionRequestDTO dto){
+            @Valid @RequestBody NotificacionRequestDTO dto) {
+
+        log.info("POST /api/notificaciones - Creando notificación para usuario {}",
+                dto.getUserId());
+
+        NotificacionResponseDTO response =
+                service.crearNotificacion(dto);
+
+        log.info("Notificación creada con ID: {}",
+                response.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(service.crearNotificacion(dto));
+                .body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<NotificacionResponseDTO>>
-    listarNotificaciones(){
+    listarNotificaciones() {
 
-        return ResponseEntity.ok(
-                service.listarNotificaciones());
+        log.info("GET /api/notificaciones - Listando notificaciones");
+
+        List<NotificacionResponseDTO> response =
+                service.listarNotificaciones();
+
+        log.info("Notificaciones encontradas: {}",
+                response.size());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<NotificacionResponseDTO>
-    buscarPorId(@PathVariable Long id){
+    buscarPorId(@PathVariable Long id) {
+
+        log.info("GET /api/notificaciones/{} - Buscando por ID",
+                id);
 
         return ResponseEntity.ok(
                 service.buscarPorId(id));
@@ -56,7 +75,10 @@ public class NotificacionController {
     @GetMapping("/usuario/{userId}")
     public ResponseEntity<List<NotificacionResponseDTO>>
     buscarPorUsuario(
-            @PathVariable Long userId){
+            @PathVariable Long userId) {
+
+        log.info("GET /api/notificaciones/usuario/{} - Buscando por usuario",
+                userId);
 
         return ResponseEntity.ok(
                 service.buscarPorUsuario(userId));
@@ -66,17 +88,31 @@ public class NotificacionController {
     public ResponseEntity<NotificacionResponseDTO>
     actualizarNotificacion(
             @PathVariable Long id,
-            @Valid @RequestBody NotificacionRequestDTO dto){
+            @Valid @RequestBody NotificacionRequestDTO dto) {
 
-        return ResponseEntity.ok(
-                service.actualizarNotificacion(id, dto));
+        log.info("PUT /api/notificaciones/{} - Actualizando notificación",
+                id);
+
+        NotificacionResponseDTO response =
+                service.actualizarNotificacion(id, dto);
+
+        log.info("Notificación actualizada con ID: {}",
+                response.getId());
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
-    eliminarNotificacion(@PathVariable Long id){
+    eliminarNotificacion(@PathVariable Long id) {
+
+        log.info("DELETE /api/notificaciones/{} - Eliminando notificación lógica",
+                id);
 
         service.eliminarNotificacion(id);
+
+        log.info("Notificación eliminada correctamente ID: {}",
+                id);
 
         return ResponseEntity.noContent().build();
     }

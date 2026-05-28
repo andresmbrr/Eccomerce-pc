@@ -15,16 +15,11 @@ import lombok.Setter;
 public class NotificacionResponseDTO {
 
     private Long id;
-
     private Long userId;
-
     private String titulo;
-
     private String mensaje;
-
     private String tipo;
-
     private Boolean enviado;
-
     private LocalDateTime fechaEnvio;
+    private Boolean active;
 }
