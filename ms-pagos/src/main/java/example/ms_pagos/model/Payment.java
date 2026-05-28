@@ -1,4 +1,5 @@
 package example.ms_pagos.model;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -44,4 +45,7 @@ public class Payment {
 
     @Column(nullable = false)
     private LocalDateTime paymentDate;
+
+    @Column(nullable = false)
+    private Boolean active;
 }

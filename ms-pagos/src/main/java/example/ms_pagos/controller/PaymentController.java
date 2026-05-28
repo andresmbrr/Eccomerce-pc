@@ -1,7 +1,5 @@
 package example.ms_pagos.controller;
 
-
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/payments")
+@RequestMapping("/api/pagos")
 @RequiredArgsConstructor
 @Slf4j
 public class PaymentController {
@@ -33,29 +31,42 @@ public class PaymentController {
     @PostMapping
     public ResponseEntity<PaymentResponseDTO>
     createPayment(
-            @Valid @RequestBody PaymentRequestDTO dto){
+            @Valid @RequestBody PaymentRequestDTO dto) {
 
-        log.info("POST /api/payments ejecutado");
+        log.info("POST /api/pagos - Procesando pago para pedido ID: {}",
+                dto.getOrderId());
+
+        PaymentResponseDTO response =
+                service.createPayment(dto);
+
+        log.info("Pago creado correctamente con ID: {}",
+                response.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(service.createPayment(dto));
+                .body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<PaymentResponseDTO>>
-    getAllPayments(){
+    getAllPayments() {
 
-        log.info("GET /api/payments ejecutado");
+        log.info("GET /api/pagos - Listando pagos");
 
-        return ResponseEntity.ok(
-                service.getAllPayments());
+        List<PaymentResponseDTO> payments =
+                service.getAllPayments();
+
+        log.info("Pagos encontrados: {}",
+                payments.size());
+
+        return ResponseEntity.ok(payments);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PaymentResponseDTO>
-    getPaymentById(@PathVariable Long id){
+    getPaymentById(@PathVariable Long id) {
 
-        log.info("GET /api/payments/{} ejecutado", id);
+        log.info("GET /api/pagos/{} - Buscando pago por ID",
+                id);
 
         return ResponseEntity.ok(
                 service.getPaymentById(id));
@@ -64,9 +75,9 @@ public class PaymentController {
     @GetMapping("/order/{orderId}")
     public ResponseEntity<List<PaymentResponseDTO>>
     getPaymentsByOrderId(
-            @PathVariable Long orderId){
+            @PathVariable Long orderId) {
 
-        log.info("GET pagos pedido {}",
+        log.info("GET /api/pagos/order/{} - Buscando pagos por pedido",
                 orderId);
 
         return ResponseEntity.ok(
@@ -77,21 +88,31 @@ public class PaymentController {
     public ResponseEntity<PaymentResponseDTO>
     updatePayment(
             @PathVariable Long id,
-            @Valid @RequestBody PaymentRequestDTO dto){
+            @Valid @RequestBody PaymentRequestDTO dto) {
 
-        log.info("PUT /api/payments/{} ejecutado", id);
+        log.info("PUT /api/pagos/{} - Actualizando pago",
+                id);
 
-        return ResponseEntity.ok(
-                service.updatePayment(id, dto));
+        PaymentResponseDTO response =
+                service.updatePayment(id, dto);
+
+        log.info("Pago actualizado correctamente con ID: {}",
+                response.getId());
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
-    deletePayment(@PathVariable Long id){
+    deletePayment(@PathVariable Long id) {
 
-        log.info("DELETE /api/payments/{} ejecutado", id);
+        log.info("DELETE /api/pagos/{} - Eliminando pago lógico",
+                id);
 
         service.deletePayment(id);
+
+        log.info("Pago eliminado correctamente con ID: {}",
+                id);
 
         return ResponseEntity.noContent().build();
     }

@@ -3,9 +3,8 @@ package example.ms_pagos.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import example.ms_pagos.model.PaymentStatus;
+import example.ms_pagos.model.OrderStatus;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,20 +13,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class PaymentResponseDTO {
+public class OrderResponseDTO {
 
     private Long id;
 
-    private Long orderId;
+    private Long userId;
 
-    private BigDecimal amount;
+    private LocalDateTime orderDate;
 
-    private String paymentMethod;
+    private BigDecimal total;
 
-    private PaymentStatus status;
-
-    private LocalDateTime paymentDate;
+    private OrderStatus status;
 
     private Boolean active;
 }
