@@ -1,12 +1,12 @@
 server:
-  port: 8081
+  port: 8087
 
 spring:
   application:
-    name: ms-auth
+    name: ms-pagos
 
   datasource:
-    url: jdbc:mysql://localhost:3307/ms_auth_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/ms_pagos_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
