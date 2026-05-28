@@ -1,4 +1,5 @@
 package example.ms_reviews.controller;
+
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -30,23 +31,42 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<ReviewResponseDTO>
     crearReview(
-            @Valid @RequestBody ReviewRequestDTO dto){
+            @Valid @RequestBody ReviewRequestDTO dto) {
+
+        log.info("POST /api/reviews - Creando review para producto {}",
+                dto.getProductId());
+
+        ReviewResponseDTO response =
+                service.crearReview(dto);
+
+        log.info("Review creada con ID: {}",
+                response.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(service.crearReview(dto));
+                .body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<ReviewResponseDTO>>
-    listarReviews(){
+    listarReviews() {
 
-        return ResponseEntity.ok(
-                service.listarReviews());
+        log.info("GET /api/reviews - Listando reviews");
+
+        List<ReviewResponseDTO> response =
+                service.listarReviews();
+
+        log.info("Reviews encontradas: {}",
+                response.size());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ReviewResponseDTO>
-    buscarPorId(@PathVariable Long id){
+    buscarPorId(@PathVariable Long id) {
+
+        log.info("GET /api/reviews/{} - Buscando por ID",
+                id);
 
         return ResponseEntity.ok(
                 service.buscarPorId(id));
@@ -55,7 +75,10 @@ public class ReviewController {
     @GetMapping("/producto/{productId}")
     public ResponseEntity<List<ReviewResponseDTO>>
     buscarPorProducto(
-            @PathVariable Long productId){
+            @PathVariable Long productId) {
+
+        log.info("GET /api/reviews/producto/{} - Buscando por producto",
+                productId);
 
         return ResponseEntity.ok(
                 service.buscarPorProducto(productId));
@@ -64,7 +87,10 @@ public class ReviewController {
     @GetMapping("/usuario/{userId}")
     public ResponseEntity<List<ReviewResponseDTO>>
     buscarPorUsuario(
-            @PathVariable Long userId){
+            @PathVariable Long userId) {
+
+        log.info("GET /api/reviews/usuario/{} - Buscando por usuario",
+                userId);
 
         return ResponseEntity.ok(
                 service.buscarPorUsuario(userId));
@@ -74,17 +100,31 @@ public class ReviewController {
     public ResponseEntity<ReviewResponseDTO>
     actualizarReview(
             @PathVariable Long id,
-            @Valid @RequestBody ReviewRequestDTO dto){
+            @Valid @RequestBody ReviewRequestDTO dto) {
 
-        return ResponseEntity.ok(
-                service.actualizarReview(id, dto));
+        log.info("PUT /api/reviews/{} - Actualizando review",
+                id);
+
+        ReviewResponseDTO response =
+                service.actualizarReview(id, dto);
+
+        log.info("Review actualizada con ID: {}",
+                response.getId());
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
-    eliminarReview(@PathVariable Long id){
+    eliminarReview(@PathVariable Long id) {
+
+        log.info("DELETE /api/reviews/{} - Eliminando review lógica",
+                id);
 
         service.eliminarReview(id);
+
+        log.info("Review eliminada correctamente ID: {}",
+                id);
 
         return ResponseEntity.noContent().build();
     }

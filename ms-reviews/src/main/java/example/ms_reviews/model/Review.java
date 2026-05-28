@@ -1,4 +1,5 @@
 package example.ms_reviews.model;
+
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -40,4 +41,7 @@ public class Review {
 
     @Column(nullable = false)
     private LocalDateTime fecha;
+
+    @Column(nullable = false)
+    private Boolean active;
 }

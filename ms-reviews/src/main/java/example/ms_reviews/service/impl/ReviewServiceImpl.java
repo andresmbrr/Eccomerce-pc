@@ -1,23 +1,18 @@
 package example.ms_reviews.service.impl;
 
-import example.ms_reviews.dto.*;
-
-import example.ms_reviews.exception.ReviewNotFoundException;
-
-import example.ms_reviews.model.Review;
-
-import example.ms_reviews.repository.ReviewRepository;
-
-import example.ms_reviews.service.ReviewService;
-
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import example.ms_reviews.dto.ReviewRequestDTO;
+import example.ms_reviews.dto.ReviewResponseDTO;
+import example.ms_reviews.exception.ReviewNotFoundException;
+import example.ms_reviews.model.Review;
+import example.ms_reviews.repository.ReviewRepository;
+import example.ms_reviews.service.ReviewService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +26,9 @@ public class ReviewServiceImpl
     public ReviewResponseDTO crearReview(
             ReviewRequestDTO dto) {
 
-        log.info("Creando review producto {}",
-                dto.getProductId());
+        log.info("Creando review para producto ID: {} y usuario ID: {}",
+                dto.getProductId(),
+                dto.getUserId());
 
         Review review = Review.builder()
                 .userId(dto.getUserId())
@@ -40,9 +36,13 @@ public class ReviewServiceImpl
                 .rating(dto.getRating())
                 .comentario(dto.getComentario())
                 .fecha(LocalDateTime.now())
+                .active(true)
                 .build();
 
         Review saved = repository.save(review);
+
+        log.info("Review creada correctamente con ID: {}",
+                saved.getId());
 
         return mapToDTO(saved);
     }
@@ -50,19 +50,37 @@ public class ReviewServiceImpl
     @Override
     public List<ReviewResponseDTO> listarReviews() {
 
-        return repository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+        log.info("Listando reviews activas");
+
+        List<ReviewResponseDTO> reviews =
+                repository.findAll()
+                        .stream()
+                        .filter(review ->
+                                Boolean.TRUE.equals(review.getActive()))
+                        .map(this::mapToDTO)
+                        .toList();
+
+        log.info("Reviews activas encontradas: {}",
+                reviews.size());
+
+        return reviews;
     }
 
     @Override
     public ReviewResponseDTO buscarPorId(Long id) {
 
+        log.info("Buscando review con ID: {}",
+                id);
+
         Review review = repository.findById(id)
-                .orElseThrow(() ->
-                        new ReviewNotFoundException(
-                                "Review no encontrada"));
+                .orElseThrow(() -> {
+
+                    log.warn("Review no encontrada con ID: {}",
+                            id);
+
+                    return new ReviewNotFoundException(
+                            "Review no encontrada con ID: " + id);
+                });
 
         return mapToDTO(review);
     }
@@ -71,20 +89,44 @@ public class ReviewServiceImpl
     public List<ReviewResponseDTO>
     buscarPorProducto(Long productId) {
 
-        return repository.findByProductId(productId)
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+        log.info("Buscando reviews del producto ID: {}",
+                productId);
+
+        List<ReviewResponseDTO> reviews =
+                repository.findByProductId(productId)
+                        .stream()
+                        .filter(review ->
+                                Boolean.TRUE.equals(review.getActive()))
+                        .map(this::mapToDTO)
+                        .toList();
+
+        log.info("Reviews encontradas para producto {}: {}",
+                productId,
+                reviews.size());
+
+        return reviews;
     }
 
     @Override
     public List<ReviewResponseDTO>
     buscarPorUsuario(Long userId) {
 
-        return repository.findByUserId(userId)
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+        log.info("Buscando reviews del usuario ID: {}",
+                userId);
+
+        List<ReviewResponseDTO> reviews =
+                repository.findByUserId(userId)
+                        .stream()
+                        .filter(review ->
+                                Boolean.TRUE.equals(review.getActive()))
+                        .map(this::mapToDTO)
+                        .toList();
+
+        log.info("Reviews encontradas para usuario {}: {}",
+                userId,
+                reviews.size());
+
+        return reviews;
     }
 
     @Override
@@ -92,10 +134,18 @@ public class ReviewServiceImpl
             Long id,
             ReviewRequestDTO dto) {
 
+        log.info("Actualizando review con ID: {}",
+                id);
+
         Review review = repository.findById(id)
-                .orElseThrow(() ->
-                        new ReviewNotFoundException(
-                                "Review no encontrada"));
+                .orElseThrow(() -> {
+
+                    log.warn("No se pudo actualizar. Review no encontrada con ID: {}",
+                            id);
+
+                    return new ReviewNotFoundException(
+                            "Review no encontrada con ID: " + id);
+                });
 
         review.setUserId(dto.getUserId());
         review.setProductId(dto.getProductId());
@@ -104,24 +154,38 @@ public class ReviewServiceImpl
 
         Review updated = repository.save(review);
 
+        log.info("Review actualizada correctamente con ID: {}",
+                updated.getId());
+
         return mapToDTO(updated);
     }
 
     @Override
     public void eliminarReview(Long id) {
 
+        log.info("Eliminando lógicamente review con ID: {}",
+                id);
+
         Review review = repository.findById(id)
-                .orElseThrow(() ->
-                        new ReviewNotFoundException(
-                                "Review no encontrada"));
+                .orElseThrow(() -> {
 
-        repository.delete(review);
+                    log.warn("No se pudo eliminar. Review no encontrada con ID: {}",
+                            id);
 
-        log.info("Review eliminada ID {}", id);
+                    return new ReviewNotFoundException(
+                            "Review no encontrada con ID: " + id);
+                });
+
+        review.setActive(false);
+
+        repository.save(review);
+
+        log.info("Review desactivada correctamente con ID: {}",
+                id);
     }
 
     private ReviewResponseDTO mapToDTO(
-            Review review){
+            Review review) {
 
         return ReviewResponseDTO.builder()
                 .id(review.getId())
@@ -130,6 +194,7 @@ public class ReviewServiceImpl
                 .rating(review.getRating())
                 .comentario(review.getComentario())
                 .fecha(review.getFecha())
+                .active(review.getActive())
                 .build();
     }
 }

@@ -1,37 +1,37 @@
 package example.ms_reviews.exception;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.MethodArgumentNotValidException;
-
-import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import lombok.extern.slf4j.Slf4j;
+
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ReviewNotFoundException.class)
     public ResponseEntity<Object> handleReviewNotFound(
             ReviewNotFoundException ex) {
 
-        Map<String, Object> body = new HashMap<>();
+        log.warn("Review no encontrada: {}", ex.getMessage());
 
-        body.put("timestamp", LocalDateTime.now());
-        body.put("message", ex.getMessage());
-        body.put("status", HttpStatus.NOT_FOUND.value());
-
-        return new ResponseEntity<>(
-                body,
-                HttpStatus.NOT_FOUND
-        );
+        return buildResponse(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationErrors(
+    public ResponseEntity<Object> handleValidation(
             MethodArgumentNotValidException ex) {
+
+        log.warn("Error de validación en ms-reviews");
 
         Map<String, String> errors = new HashMap<>();
 
@@ -43,27 +43,39 @@ public class GlobalExceptionHandler {
                                 error.getDefaultMessage()
                         ));
 
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("errors", errors);
+
         return new ResponseEntity<>(
-                errors,
-                HttpStatus.BAD_REQUEST
-        );
+                body,
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGlobalException(
+    public ResponseEntity<Object> handleGeneral(
             Exception ex) {
+
+        log.error("Error interno en ms-reviews", ex);
+
+        return buildResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error interno del servidor");
+    }
+
+    private ResponseEntity<Object> buildResponse(
+            HttpStatus status,
+            String message) {
 
         Map<String, Object> body = new HashMap<>();
 
         body.put("timestamp", LocalDateTime.now());
-        body.put("message",
-                "Error interno del servidor");
-
-        body.put("error", ex.getMessage());
+        body.put("status", status.value());
+        body.put("message", message);
 
         return new ResponseEntity<>(
                 body,
-                HttpStatus.INTERNAL_SERVER_ERROR
-        );
+                status);
     }
 }

@@ -1,4 +1,5 @@
 package example.ms_reviews.dto;
+
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -15,14 +16,10 @@ import lombok.Setter;
 public class ReviewResponseDTO {
 
     private Long id;
-
     private Long userId;
-
     private Long productId;
-
     private Integer rating;
-
     private String comentario;
-
     private LocalDateTime fecha;
+    private Boolean active;
 }
