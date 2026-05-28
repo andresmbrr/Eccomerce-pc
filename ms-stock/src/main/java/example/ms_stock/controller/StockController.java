@@ -1,7 +1,5 @@
 package example.ms_stock.controller;
 
-
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -33,65 +31,100 @@ public class StockController {
     @PostMapping
     public ResponseEntity<StockResponseDTO>
     createStock(
-            @Valid @RequestBody StockRequestDTO dto){
+            @Valid @RequestBody StockRequestDTO dto) {
 
-        log.info("POST /api/stock ejecutado");
+        log.info("POST /api/stock - Creando stock para producto ID: {}",
+                dto.getProductId());
+
+        StockResponseDTO response =
+                service.createStock(dto);
+
+        log.info("Stock creado correctamente con ID: {}",
+                response.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(service.createStock(dto));
+                .body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<StockResponseDTO>>
-    getAllStock(){
+    getAllStock() {
 
-        log.info("GET /api/stock ejecutado");
+        log.info("GET /api/stock - Listando stock");
 
-        return ResponseEntity.ok(
-                service.getAllStock());
+        List<StockResponseDTO> stockList =
+                service.getAllStock();
+
+        log.info("Cantidad de registros encontrados: {}",
+                stockList.size());
+
+        return ResponseEntity.ok(stockList);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<StockResponseDTO>
-    getStockById(@PathVariable Long id){
+    getStockById(
+            @PathVariable Long id) {
 
-        log.info("GET /api/stock/{} ejecutado", id);
+        log.info("GET /api/stock/{} - Buscando stock por ID",
+                id);
 
-        return ResponseEntity.ok(
-                service.getStockById(id));
+        StockResponseDTO response =
+                service.getStockById(id);
+
+        log.info("Stock encontrado con ID: {}",
+                response.getId());
+
+        return ResponseEntity.ok(response);
     }
 
-  @GetMapping("/product/{productId}")
-public ResponseEntity<StockResponseDTO>
-getStockByProductId(
-        @PathVariable("productId") Long productId){
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<StockResponseDTO>
+    getStockByProductId(
+            @PathVariable Long productId) {
 
-    log.info("GET stock producto {}",
-            productId);
+        log.info("GET /api/stock/product/{} - Buscando stock por producto",
+                productId);
 
-    return ResponseEntity.ok(
-            service.getStockByProductId(productId));
-}
+        StockResponseDTO response =
+                service.getStockByProductId(productId);
+
+        log.info("Stock encontrado para producto ID: {}",
+                productId);
+
+        return ResponseEntity.ok(response);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<StockResponseDTO>
     updateStock(
             @PathVariable Long id,
-            @Valid @RequestBody StockRequestDTO dto){
+            @Valid @RequestBody StockRequestDTO dto) {
 
-        log.info("PUT /api/stock/{} ejecutado", id);
+        log.info("PUT /api/stock/{} - Actualizando stock",
+                id);
 
-        return ResponseEntity.ok(
-                service.updateStock(id, dto));
+        StockResponseDTO response =
+                service.updateStock(id, dto);
+
+        log.info("Stock actualizado correctamente con ID: {}",
+                response.getId());
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
-    deleteStock(@PathVariable Long id){
+    deleteStock(
+            @PathVariable Long id) {
 
-        log.info("DELETE /api/stock/{} ejecutado", id);
+        log.info("DELETE /api/stock/{} - Eliminando stock lógico",
+                id);
 
         service.deleteStock(id);
+
+        log.info("Stock eliminado correctamente con ID: {}",
+                id);
 
         return ResponseEntity.noContent().build();
     }

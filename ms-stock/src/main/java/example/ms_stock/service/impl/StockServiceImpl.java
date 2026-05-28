@@ -1,13 +1,13 @@
 package example.ms_stock.service.impl;
 
-
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import example.ms_stock.dto.StockRequestDTO;
 import example.ms_stock.dto.StockResponseDTO;
-import example.ms_stock.exception.ResourceNotFoundException;
+import example.ms_stock.exception.StockAlreadyExistsException;
+import example.ms_stock.exception.StockNotFoundException;
 import example.ms_stock.model.Stock;
 import example.ms_stock.repository.StockRepository;
 import example.ms_stock.service.StockService;
@@ -26,18 +26,28 @@ public class StockServiceImpl
     public StockResponseDTO createStock(
             StockRequestDTO dto) {
 
-        log.info("Creando stock producto {}",
+        log.info("Creando stock para producto ID: {}",
                 dto.getProductId());
+
+        if (repository.existsByProductId(
+                dto.getProductId())) {
+
+            log.warn("Ya existe stock para producto ID: {}",
+                    dto.getProductId());
+
+            throw new StockAlreadyExistsException(
+                    "Ya existe stock para este producto");
+        }
 
         Stock stock = Stock.builder()
                 .productId(dto.getProductId())
                 .quantity(dto.getQuantity())
-                .available(dto.getQuantity() > 0)
+                .available(true)
                 .build();
 
         Stock saved = repository.save(stock);
 
-        log.info("Stock creado ID {}",
+        log.info("Stock creado correctamente con ID: {}",
                 saved.getId());
 
         return mapToDTO(saved);
@@ -55,14 +65,21 @@ public class StockServiceImpl
     }
 
     @Override
-    public StockResponseDTO getStockById(Long id) {
+    public StockResponseDTO getStockById(
+            Long id) {
 
-        log.info("Buscando stock ID {}", id);
+        log.info("Buscando stock con ID: {}",
+                id);
 
         Stock stock = repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Stock no encontrado"));
+                .orElseThrow(() -> {
+
+                    log.warn("Stock no encontrado con ID: {}",
+                            id);
+
+                    return new StockNotFoundException(
+                            "Stock no encontrado con ID: " + id);
+                });
 
         return mapToDTO(stock);
     }
@@ -71,14 +88,18 @@ public class StockServiceImpl
     public StockResponseDTO getStockByProductId(
             Long productId) {
 
-        log.info("Buscando stock producto {}",
+        log.info("Buscando stock para producto ID: {}",
                 productId);
 
-        Stock stock = repository
-                .findByProductId(productId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Stock no encontrado"));
+        Stock stock = repository.findByProductId(productId)
+                .orElseThrow(() -> {
+
+                    log.warn("Stock no encontrado para producto ID: {}",
+                            productId);
+
+                    return new StockNotFoundException(
+                            "Stock no encontrado para producto ID: " + productId);
+                });
 
         return mapToDTO(stock);
     }
@@ -88,20 +109,29 @@ public class StockServiceImpl
             Long id,
             StockRequestDTO dto) {
 
-        log.info("Actualizando stock ID {}", id);
+        log.info("Actualizando stock con ID: {}",
+                id);
 
         Stock stock = repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Stock no encontrado"));
+                .orElseThrow(() -> {
+
+                    log.warn("No se pudo actualizar. Stock no encontrado con ID: {}",
+                            id);
+
+                    return new StockNotFoundException(
+                            "Stock no encontrado con ID: " + id);
+                });
 
         stock.setProductId(dto.getProductId());
         stock.setQuantity(dto.getQuantity());
-        stock.setAvailable(dto.getQuantity() > 0);
+
+        if (dto.getAvailable() != null) {
+            stock.setAvailable(dto.getAvailable());
+        }
 
         Stock updated = repository.save(stock);
 
-        log.info("Stock actualizado ID {}",
+        log.info("Stock actualizado correctamente con ID: {}",
                 updated.getId());
 
         return mapToDTO(updated);
@@ -110,20 +140,29 @@ public class StockServiceImpl
     @Override
     public void deleteStock(Long id) {
 
-        log.info("Eliminando stock ID {}", id);
+        log.info("Eliminando stock lógico con ID: {}",
+                id);
 
         Stock stock = repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Stock no encontrado"));
+                .orElseThrow(() -> {
 
-        repository.delete(stock);
+                    log.warn("No se pudo eliminar. Stock no encontrado con ID: {}",
+                            id);
 
-        log.info("Stock eliminado ID {}", id);
+                    return new StockNotFoundException(
+                            "Stock no encontrado con ID: " + id);
+                });
+
+        stock.setAvailable(false);
+
+        repository.save(stock);
+
+        log.info("Stock desactivado correctamente con ID: {}",
+                id);
     }
 
     private StockResponseDTO mapToDTO(
-            Stock stock){
+            Stock stock) {
 
         return StockResponseDTO.builder()
                 .id(stock.getId())
