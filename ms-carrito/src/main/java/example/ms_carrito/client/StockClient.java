@@ -10,6 +10,6 @@ import example.ms_carrito.dto.StockResponseDTO;
 public interface StockClient {
 
     @GetMapping("/api/stock/product/{productId}")
-    StockResponseDTO obtenerStockProducto(
-            @PathVariable("productId") Long productId);
+    StockResponseDTO getStockByProductId(
+            @PathVariable Long productId);
 }

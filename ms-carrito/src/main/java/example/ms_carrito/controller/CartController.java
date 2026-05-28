@@ -28,45 +28,61 @@ public class CartController {
     private final CartService service;
 
     @PostMapping
-    public ResponseEntity<CartResponseDTO>
-    addToCart(
-            @Valid @RequestBody CartRequestDTO dto){
+    public ResponseEntity<CartResponseDTO> addToCart(
+            @Valid @RequestBody CartRequestDTO dto) {
 
-        log.info("POST /api/cart ejecutado");
+        log.info("POST /api/carrito - Agregando producto {} al carrito del usuario {}",
+                dto.getProductId(), dto.getUserId());
+
+        CartResponseDTO response = service.addToCart(dto);
+
+        log.info("Item agregado al carrito con ID: {}", response.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(service.addToCart(dto));
+                .body(response);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<CartResponseDTO>>
-    getCartByUser(@PathVariable Long userId){
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<CartResponseDTO>> getCartByUser(
+            @PathVariable Long userId) {
 
-        log.info("GET carrito usuario {}",
+        log.info("GET /api/carrito/user/{} - Consultando carrito de usuario",
                 userId);
 
-        return ResponseEntity.ok(
-                service.getCartByUser(userId));
+        List<CartResponseDTO> response =
+                service.getCartByUser(userId);
+
+        log.info("Items encontrados en carrito del usuario {}: {}",
+                userId, response.size());
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void>
-    removeItem(@PathVariable Long id){
+    public ResponseEntity<Void> removeItem(
+            @PathVariable Long id) {
 
-        log.info("DELETE item carrito {}", id);
+        log.info("DELETE /api/carrito/{} - Eliminando item del carrito",
+                id);
 
         service.removeItem(id);
+
+        log.info("Item eliminado correctamente del carrito ID: {}", id);
 
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<Void>
-    clearCart(@PathVariable Long userId){
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<Void> clearCart(
+            @PathVariable Long userId) {
 
-        log.info("DELETE limpiar carrito {}", userId);
+        log.info("DELETE /api/carrito/user/{} - Limpiando carrito de usuario",
+                userId);
 
         service.clearCart(userId);
+
+        log.info("Carrito limpiado correctamente para usuario ID: {}",
+                userId);
 
         return ResponseEntity.noContent().build();
     }

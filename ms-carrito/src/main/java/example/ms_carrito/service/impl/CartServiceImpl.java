@@ -10,7 +10,10 @@ import example.ms_carrito.client.ProductClient;
 import example.ms_carrito.client.StockClient;
 import example.ms_carrito.dto.CartRequestDTO;
 import example.ms_carrito.dto.CartResponseDTO;
+import example.ms_carrito.dto.ProductResponseDTO;
+import example.ms_carrito.dto.StockResponseDTO;
 import example.ms_carrito.exception.CartNotFoundException;
+import example.ms_carrito.exception.InsufficientStockException;
 import example.ms_carrito.model.CartItem;
 import example.ms_carrito.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -19,89 +22,119 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CartServiceImpl
-        implements CartService {
+public class CartServiceImpl implements CartService {
 
     private final CartRepository repository;
-    private final ProductClient productoClient;
-
+    private final ProductClient productClient;
     private final StockClient stockClient;
 
     @Override
-    public CartResponseDTO addToCart(
-            CartRequestDTO dto) {
+    public CartResponseDTO addToCart(CartRequestDTO dto) {
 
-        log.info("Agregando producto {} al carrito",
-                dto.getProductId());
+        log.info("Agregando producto ID {} al carrito del usuario ID {}",
+                dto.getProductId(), dto.getUserId());
 
-        BigDecimal fakePrice =
-                BigDecimal.valueOf(10000);
+        ProductResponseDTO product =
+                productClient.getProductById(dto.getProductId());
 
-        BigDecimal subtotal =
-                fakePrice.multiply(
-                        BigDecimal.valueOf(
-                                dto.getQuantity()));
+        log.info("Producto recibido desde ms-productos: {}",
+                product.getName());
+
+        StockResponseDTO stock =
+                stockClient.getStockByProductId(dto.getProductId());
+
+        log.info("Stock recibido desde ms-stock. Producto ID: {}, cantidad disponible: {}",
+                stock.getProductId(), stock.getQuantity());
+
+        if (Boolean.FALSE.equals(stock.getAvailable())) {
+            log.warn("Producto ID {} no disponible en stock",
+                    dto.getProductId());
+
+            throw new InsufficientStockException(
+                    "El producto no está disponible");
+        }
+
+        if (stock.getQuantity() < dto.getQuantity()) {
+            log.warn("Stock insuficiente para producto ID {}. Solicitado: {}, Disponible: {}",
+                    dto.getProductId(), dto.getQuantity(), stock.getQuantity());
+
+            throw new InsufficientStockException(
+                    "Stock insuficiente para el producto");
+        }
+
+        BigDecimal price = product.getPrice();
+
+        BigDecimal subtotal = price.multiply(
+                BigDecimal.valueOf(dto.getQuantity()));
 
         CartItem item = CartItem.builder()
                 .userId(dto.getUserId())
                 .productId(dto.getProductId())
                 .quantity(dto.getQuantity())
-                .price(fakePrice)
+                .price(price)
                 .subtotal(subtotal)
+                .active(true)
                 .build();
 
         CartItem saved = repository.save(item);
 
-        log.info("Producto agregado carrito ID {}",
+        log.info("Producto agregado correctamente al carrito. Item ID: {}",
                 saved.getId());
 
         return mapToDTO(saved);
     }
 
     @Override
-    public List<CartResponseDTO> getCartByUser(
-            Long userId) {
+    public List<CartResponseDTO> getCartByUser(Long userId) {
 
-        log.info("Obteniendo carrito usuario {}",
-                userId);
+        log.info("Obteniendo carrito del usuario ID: {}", userId);
 
-        return repository.findByUserId(userId)
+        List<CartResponseDTO> items = repository.findByUserId(userId)
                 .stream()
+                .filter(item -> Boolean.TRUE.equals(item.getActive()))
                 .map(this::mapToDTO)
                 .toList();
+
+        log.info("Items activos encontrados para usuario {}: {}",
+                userId, items.size());
+
+        return items;
     }
 
     @Override
     public void removeItem(Long id) {
 
-        log.info("Eliminando item carrito ID {}", id);
+        log.info("Eliminando lógicamente item del carrito ID: {}", id);
 
         CartItem item = repository.findById(id)
-                .orElseThrow(() ->
-                        new CartNotFoundException(
-                                "Item no encontrado"));
+                .orElseThrow(() -> {
+                    log.warn("Item de carrito no encontrado con ID: {}", id);
+                    return new CartNotFoundException(
+                            "Item de carrito no encontrado con ID: " + id);
+                });
 
-        repository.delete(item);
+        item.setActive(false);
+        repository.save(item);
 
-        log.info("Item eliminado carrito");
+        log.info("Item de carrito desactivado correctamente ID: {}", id);
     }
 
     @Override
     public void clearCart(Long userId) {
 
-        log.info("Limpiando carrito usuario {}",
-                userId);
+        log.info("Limpiando lógicamente carrito del usuario ID: {}", userId);
 
-        List<CartItem> items =
-                repository.findByUserId(userId);
+        List<CartItem> items = repository.findByUserId(userId);
 
-        repository.deleteAll(items);
+        items.forEach(item -> item.setActive(false));
 
-        log.info("Carrito limpiado");
+        repository.saveAll(items);
+
+        log.info("Carrito del usuario {} limpiado correctamente. Items afectados: {}",
+                userId, items.size());
     }
 
-    private CartResponseDTO mapToDTO(
-            CartItem item){
+    private CartResponseDTO mapToDTO(CartItem item) {
 
         return CartResponseDTO.builder()
                 .id(item.getId())

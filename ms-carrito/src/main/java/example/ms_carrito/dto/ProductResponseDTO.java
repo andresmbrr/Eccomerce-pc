@@ -1,5 +1,7 @@
 package example.ms_carrito.dto;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,13 +11,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockResponseDTO {
+public class ProductResponseDTO {
 
     private Long id;
 
-    private Long productId;
+    private String name;
 
-    private Integer quantity;
+    private String description;
 
-    private Boolean available;
+    private BigDecimal price;
+
+    private String category;
+
+    private Boolean active;
 }

@@ -1,0 +1,8 @@
+package example.ms_carrito.exception;
+
+public class InsufficientStockException extends RuntimeException {
+
+    public InsufficientStockException(String message) {
+        super(message);
+    }
+}
