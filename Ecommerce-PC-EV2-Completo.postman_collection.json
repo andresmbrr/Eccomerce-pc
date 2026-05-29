@@ -1,0 +1,1569 @@
+{
+  "info": {
+    "name": "Ecommerce-PC EV2 - Microservicios Completo",
+    "description": "Colección Postman completa para probar Ecommerce-PC por API Gateway, incluyendo ms-auth, ms-user, validaciones y microservicios de negocio.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "gateway",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Crear rol ADMIN",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/roles",
+              "host": [
+                "{{gateway}}/api/auth/roles"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"ADMIN\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar roles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/roles",
+              "host": [
+                "{{gateway}}/api/auth/roles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/register",
+              "host": [
+                "{{gateway}}/api/auth/register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"andres3\",\n  \"email\": \"andres3@test.com\",\n  \"password\": \"123456\",\n  \"roleId\": 1\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/login",
+              "host": [
+                "{{gateway}}/api/auth/login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"andres3@test.com\",\n  \"password\": \"123456\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar usuarios auth",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/users",
+              "host": [
+                "{{gateway}}/api/auth/users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar usuario auth por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/users/1",
+              "host": [
+                "{{gateway}}/api/auth/users/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar usuario auth",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/users/1",
+              "host": [
+                "{{gateway}}/api/auth/users/1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"andres actualizado\",\n  \"email\": \"andres3@test.com\",\n  \"password\": \"123456\",\n  \"roleId\": 1\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar usuario auth",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/users/1",
+              "host": [
+                "{{gateway}}/api/auth/users/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Error validación rol",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/roles",
+              "host": [
+                "{{gateway}}/api/auth/roles"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Error validación registro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/register",
+              "host": [
+                "{{gateway}}/api/auth/register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"\",\n  \"email\": \"correo-malo\",\n  \"password\": \"123\",\n  \"roleId\": 0\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Error validación login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/login",
+              "host": [
+                "{{gateway}}/api/auth/login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"\",\n  \"password\": \"\"\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Crear perfil usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/users",
+              "host": [
+                "{{gateway}}/api/users"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authUserId\": 1,\n  \"firstName\": \"Andres\",\n  \"lastName\": \"Bustamante\",\n  \"phone\": \"+56912345678\",\n  \"address\": \"Santiago, Chile\",\n  \"birthDate\": \"2000-05-15\",\n  \"active\": true\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar perfiles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/users",
+              "host": [
+                "{{gateway}}/api/users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar perfil por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/users/1",
+              "host": [
+                "{{gateway}}/api/users/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar perfil",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/users/1",
+              "host": [
+                "{{gateway}}/api/users/1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authUserId\": 1,\n  \"firstName\": \"Andres Maximiliano\",\n  \"lastName\": \"Bustamante\",\n  \"phone\": \"+56987654321\",\n  \"address\": \"Santiago Centro\",\n  \"birthDate\": \"2000-05-15\",\n  \"active\": true\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar perfil",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/users/1",
+              "host": [
+                "{{gateway}}/api/users/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Error validación perfil",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/users",
+              "host": [
+                "{{gateway}}/api/users"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authUserId\": 0,\n  \"firstName\": \"\",\n  \"lastName\": \"\",\n  \"phone\": \"\",\n  \"address\": \"\",\n  \"birthDate\": \"2030-01-01\",\n  \"active\": true\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categorias",
+      "item": [
+        {
+          "name": "Crear categoría",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/categorias",
+              "host": [
+                "{{gateway}}/api/categorias"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Notebook\",\n  \"descripcion\": \"Computadores portátiles para trabajo, estudio y gaming\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar categorías",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/categorias",
+              "host": [
+                "{{gateway}}/api/categorias"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar categoría por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/categorias/1",
+              "host": [
+                "{{gateway}}/api/categorias/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar categoría",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/categorias/1",
+              "host": [
+                "{{gateway}}/api/categorias/1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Notebook Gamer\",\n  \"descripcion\": \"Notebooks gamer de alto rendimiento\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar categoría",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/categorias/1",
+              "host": [
+                "{{gateway}}/api/categorias/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validación fallida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/categorias",
+              "host": [
+                "{{gateway}}/api/categorias"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"\",\n  \"descripcion\": \"abc\"\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Productos",
+      "item": [
+        {
+          "name": "Crear producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/productos",
+              "host": [
+                "{{gateway}}/api/productos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Teclado Redragon Kumara\",\n  \"description\": \"Teclado mecánico gamer con switches blue\",\n  \"price\": 39990,\n  \"category\": \"Perifericos\",\n  \"active\": true\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar productos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/productos",
+              "host": [
+                "{{gateway}}/api/productos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar producto por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/productos/1",
+              "host": [
+                "{{gateway}}/api/productos/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar por categoría",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/productos/category/Perifericos",
+              "host": [
+                "{{gateway}}/api/productos/category/Perifericos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar producto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/productos/1",
+              "host": [
+                "{{gateway}}/api/productos/1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Notebook Lenovo Legion 5 Pro\",\n  \"description\": \"Notebook gamer actualizado con RTX y SSD\",\n  \"price\": 1199990,\n  \"category\": \"Notebook\",\n  \"active\": true\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar producto",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/productos/1",
+              "host": [
+                "{{gateway}}/api/productos/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validación fallida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/productos",
+              "host": [
+                "{{gateway}}/api/productos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"description\": \"abc\",\n  \"price\": -100,\n  \"category\": \"\",\n  \"active\": true\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Stock",
+      "item": [
+        {
+          "name": "Crear stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/stock",
+              "host": [
+                "{{gateway}}/api/stock"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": 1,\n  \"quantity\": 20,\n  \"available\": true\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar stock",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/stock",
+              "host": [
+                "{{gateway}}/api/stock"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar stock por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/stock/1",
+              "host": [
+                "{{gateway}}/api/stock/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar stock por producto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/stock/product/1",
+              "host": [
+                "{{gateway}}/api/stock/product/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar stock",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/stock/1",
+              "host": [
+                "{{gateway}}/api/stock/1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": 1,\n  \"quantity\": 35,\n  \"available\": true\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar stock",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/stock/1",
+              "host": [
+                "{{gateway}}/api/stock/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validación fallida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/stock",
+              "host": [
+                "{{gateway}}/api/stock"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": 0,\n  \"quantity\": -5,\n  \"available\": true\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Carrito",
+      "item": [
+        {
+          "name": "Agregar al carrito",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/carrito",
+              "host": [
+                "{{gateway}}/api/carrito"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"productId\": 1,\n  \"quantity\": 2\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar carrito por usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/carrito/user/1",
+              "host": [
+                "{{gateway}}/api/carrito/user/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar item carrito",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/carrito/1",
+              "host": [
+                "{{gateway}}/api/carrito/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Limpiar carrito usuario",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/carrito/user/1",
+              "host": [
+                "{{gateway}}/api/carrito/user/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validación fallida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/carrito",
+              "host": [
+                "{{gateway}}/api/carrito"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 0,\n  \"productId\": 0,\n  \"quantity\": 0\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "Crear pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pedidos",
+              "host": [
+                "{{gateway}}/api/pedidos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"total\": 949990\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar pedidos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pedidos",
+              "host": [
+                "{{gateway}}/api/pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar pedido por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pedidos/1",
+              "host": [
+                "{{gateway}}/api/pedidos/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar pedidos por usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pedidos/user/1",
+              "host": [
+                "{{gateway}}/api/pedidos/user/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar pedido",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pedidos/1",
+              "host": [
+                "{{gateway}}/api/pedidos/1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"total\": 999990\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cambiar estado",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pedidos/1/status",
+              "host": [
+                "{{gateway}}/api/pedidos/1/status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PAID\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar pedido",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pedidos/1",
+              "host": [
+                "{{gateway}}/api/pedidos/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validación fallida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pedidos",
+              "host": [
+                "{{gateway}}/api/pedidos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 0,\n  \"total\": -100\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pagos",
+      "item": [
+        {
+          "name": "Crear pago",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pagos",
+              "host": [
+                "{{gateway}}/api/pagos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": 1,\n  \"amount\": 949990,\n  \"paymentMethod\": \"DEBIT_CARD\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar pagos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pagos",
+              "host": [
+                "{{gateway}}/api/pagos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar pago por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pagos/1",
+              "host": [
+                "{{gateway}}/api/pagos/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar pagos por pedido",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pagos/order/1",
+              "host": [
+                "{{gateway}}/api/pagos/order/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar pago",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pagos/1",
+              "host": [
+                "{{gateway}}/api/pagos/1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": 1,\n  \"amount\": 999990,\n  \"paymentMethod\": \"CREDIT_CARD\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar pago",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pagos/1",
+              "host": [
+                "{{gateway}}/api/pagos/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validación fallida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/pagos",
+              "host": [
+                "{{gateway}}/api/pagos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": 0,\n  \"amount\": -100,\n  \"paymentMethod\": \"\"\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notificaciones",
+      "item": [
+        {
+          "name": "Crear notificación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/notificaciones",
+              "host": [
+                "{{gateway}}/api/notificaciones"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"titulo\": \"Pago aprobado\",\n  \"mensaje\": \"Tu pago fue aprobado correctamente\",\n  \"tipo\": \"EMAIL\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar notificaciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/notificaciones",
+              "host": [
+                "{{gateway}}/api/notificaciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/notificaciones/1",
+              "host": [
+                "{{gateway}}/api/notificaciones/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar por usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/notificaciones/usuario/1",
+              "host": [
+                "{{gateway}}/api/notificaciones/usuario/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar notificación",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/notificaciones/1",
+              "host": [
+                "{{gateway}}/api/notificaciones/1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"titulo\": \"Pedido actualizado\",\n  \"mensaje\": \"El estado de tu pedido fue actualizado correctamente\",\n  \"tipo\": \"PUSH\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar notificación",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/notificaciones/1",
+              "host": [
+                "{{gateway}}/api/notificaciones/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validación fallida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/notificaciones",
+              "host": [
+                "{{gateway}}/api/notificaciones"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 0,\n  \"titulo\": \"\",\n  \"mensaje\": \"abc\",\n  \"tipo\": \"\"\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Crear review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/reviews",
+              "host": [
+                "{{gateway}}/api/reviews"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"productId\": 1,\n  \"rating\": 5,\n  \"comentario\": \"Excelente producto, lo recomiendo.\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar reviews",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/reviews",
+              "host": [
+                "{{gateway}}/api/reviews"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar review por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/reviews/1",
+              "host": [
+                "{{gateway}}/api/reviews/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar reviews por producto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/reviews/producto/1",
+              "host": [
+                "{{gateway}}/api/reviews/producto/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar reviews por usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/reviews/usuario/1",
+              "host": [
+                "{{gateway}}/api/reviews/usuario/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar review",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/reviews/1",
+              "host": [
+                "{{gateway}}/api/reviews/1"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"productId\": 1,\n  \"rating\": 4,\n  \"comentario\": \"Muy buen producto, aunque podría mejorar el precio.\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar review",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/reviews/1",
+              "host": [
+                "{{gateway}}/api/reviews/1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validación fallida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/reviews",
+              "host": [
+                "{{gateway}}/api/reviews"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 0,\n  \"productId\": 0,\n  \"rating\": 6,\n  \"comentario\": \"\"\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
