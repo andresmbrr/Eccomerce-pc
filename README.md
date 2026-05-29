@@ -19,20 +19,20 @@ spring.jpa.hibernate.ddl-auto=update
 
 Adicionalmente se incluyen scripts SQL de respaldo para facilitar la instalación y evaluación del proyecto.
 
-Carpeta:
 
+Carpeta:
 /sql
 Scripts incluidos:
-01-ms-auth.sql
-02-ms-user.sql
-03-ms-categorias.sql
-04-ms-productos.sql
-05-ms-stock.sql
-06-ms-carrito.sql
-07-ms-pedidos.sql
-08-ms-pagos.sql
-09-ms-notificaciones.sql
-10-ms-reviews.sql
+- 01-ms-auth.sql
+- 02-ms-user.sql
+- 03-ms-categorias.sql
+- 04-ms-productos.sql
+- 05-ms-stock.sql
+- 06-ms-carrito.sql
+- 07-ms-pedidos.sql
+- 08-ms-pagos.sql
+- 09-ms-notificaciones.sql
+- 10-ms-reviews.sql
 
 ## Integrantes
 - Andrés Bustamante
@@ -99,7 +99,16 @@ http://localhost:8761
 http://localhost:8080
 
 ## Rutas Gateway
-/api/auth/**, /api/users/**, /api/categorias/**, /api/productos/**, /api/stock/**, /api/carrito/**, /api/pedidos/**, /api/pagos/**, /api/notificaciones/** y /api/reviews/**.
+- /api/auth/**, 
+- /api/users/**, 
+- /api/categorias/**, 
+- /api/productos/**, 
+- /api/stock/**, 
+- /api/carrito/**, 
+- /api/pedidos/**, 
+- /api/pagos/**, 
+- /api/notificaciones/** 
+- /api/reviews/**.
 
 ## Feign
 Comunicación implementada:
@@ -159,17 +168,15 @@ Flujo de compra
 9. Usuario deja review
 
 
-Te faltaría un diagrama simple tipo:
+Diagrama:
 
-Cliente
+- Cliente
    ↓
-API Gateway
+- API Gateway
    ↓
-Eureka Server
+- Eureka Server
    ↓
-Microservicios
-
-y abajo:
+- Microservicios =
 
 ms-auth
 ms-user
