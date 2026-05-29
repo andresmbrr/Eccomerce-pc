@@ -2,6 +2,38 @@
 
 Proyecto semestral DSY1103 desarrollado con arquitectura de microservicios usando Spring Boot, Spring Cloud, Eureka, API Gateway, OpenFeign, JPA/Hibernate, Spring Security, BCrypt y MySQL.
 
+Cada microservicio posee su propia base de datos independiente para mantener desacoplamiento y autonomía.
+
+Las entidades son mapeadas mediante JPA utilizando anotaciones como:
+
+@Entity
+@Table
+@Id
+@GeneratedValue
+@Column
+@ManyToOne
+
+Hibernate se encarga de generar las tablas automáticamente mediante:
+
+spring.jpa.hibernate.ddl-auto=update
+
+Adicionalmente se incluyen scripts SQL de respaldo para facilitar la instalación y evaluación del proyecto.
+
+Carpeta:
+
+/sql
+Scripts incluidos:
+01-ms-auth.sql
+02-ms-user.sql
+03-ms-categorias.sql
+04-ms-productos.sql
+05-ms-stock.sql
+06-ms-carrito.sql
+07-ms-pedidos.sql
+08-ms-pagos.sql
+09-ms-notificaciones.sql
+10-ms-reviews.sql
+
 ## Integrantes
 - Andrés Bustamante
 - Matías Latrach
@@ -10,7 +42,20 @@ Proyecto semestral DSY1103 desarrollado con arquitectura de microservicios usand
 El sistema usa microservicios independientes, cada uno con responsabilidad propia, `application.yml` propio y base de datos MySQL independiente.
 
 ## Tecnologías
-Java 21, Spring Boot, Spring Cloud, Eureka Server, API Gateway, OpenFeign, Spring Security, BCrypt, JPA/Hibernate, MySQL, Maven, Lombok, Bean Validation y Postman.
+- Java 21
+- Spring Boot 3
+- Spring Cloud
+- Spring Security
+- Spring Data JPA
+- Hibernate ORM
+- MySQL
+- OpenFeign
+- Eureka Server
+- API Gateway
+- Maven
+- Lombok
+- Bean Validation
+- Postman
 
 ## Microservicios
 
@@ -69,7 +114,13 @@ Se usa Bean Validation: @NotNull, @NotBlank, @Positive, @PositiveOrZero, @Min, @
 Cada microservicio posee GlobalExceptionHandler para controlar 400, 404, 409 y 500.
 
 ## Logs
-Se usa @Slf4j en controllers y services.
+Se usa @Slf4j en controllers y services. ej: log.info("Pedido creado ID {}", saved.getId());
+Se utilizan logs con @Slf4j para registrar:
+- creación de recursos
+- búsquedas
+- actualizaciones
+- errores
+- llamadas Feign
 
 ## Scripts SQL
 Los scripts están en la carpeta /sql.
@@ -94,9 +145,39 @@ gateway = http://localhost:8080
 10. Crear notificación
 11. Crear review
 
-## Commit final recomendado
-```bash
-git add .
-git commit -m "docs: update readme and postman collection for evaluation 2"
-git push origin main
-```
+2. Flujo funcional del ecommerce
+
+Flujo de compra
+1. Usuario se registra en ms-auth
+2. Usuario crea perfil en ms-user
+3. Usuario consulta productos
+4. Usuario agrega productos al carrito
+5. ms-carrito consulta stock mediante Feign
+6. Usuario genera pedido
+7. Usuario realiza pago
+8. Se genera notificación
+9. Usuario deja review
+
+
+Te faltaría un diagrama simple tipo:
+
+Cliente
+   ↓
+API Gateway
+   ↓
+Eureka Server
+   ↓
+Microservicios
+
+y abajo:
+
+ms-auth
+ms-user
+ms-productos
+ms-stock
+ms-carrito
+ms-pedidos
+ms-pagos
+ms-notificaciones
+ms-reviews
+ms-categorias
