@@ -170,14 +170,7 @@ Flujo de compra
 
 Diagrama:
 
-- Cliente
-   ↓
-- API Gateway
-   ↓
-- Eureka Server
-   ↓
-- Microservicios =
-
+- Cliente → API Gateway → Eureka Server → Microservicios =   
 ms-auth
 ms-user
 ms-productos
