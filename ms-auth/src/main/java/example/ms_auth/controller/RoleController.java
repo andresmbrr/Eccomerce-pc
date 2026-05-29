@@ -15,10 +15,12 @@ import example.ms_auth.dto.RoleResponseDTO;
 import example.ms_auth.service.RoleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/auth/roles")
 @RequiredArgsConstructor
+@Slf4j
 public class RoleController {
 
     private final RoleService service;
@@ -27,6 +29,8 @@ public class RoleController {
     public ResponseEntity<RoleResponseDTO> createRole(
             @Valid @RequestBody RoleRequestDTO dto){
 
+        log.info("POST /api/auth/roles ejecutado");
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(service.createRole(dto));
     }
@@ -34,6 +38,9 @@ public class RoleController {
     @GetMapping
     public ResponseEntity<List<RoleResponseDTO>> getAllRoles(){
 
-        return ResponseEntity.ok(service.getAllRoles());
+        log.info("GET /api/auth/roles ejecutado");
+
+        return ResponseEntity.ok(
+                service.getAllRoles());
     }
 }

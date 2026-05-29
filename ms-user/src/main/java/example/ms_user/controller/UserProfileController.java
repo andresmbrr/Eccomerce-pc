@@ -32,30 +32,43 @@ public class UserProfileController {
     public ResponseEntity<UserProfileResponseDTO>
     create(
             @Valid @RequestBody
-            UserProfileRequestDTO dto){
+            UserProfileRequestDTO dto) {
 
-        log.info("POST perfil usuario");
+        log.info("POST /api/users - Creando perfil para authUserId: {}",
+                dto.getAuthUserId());
+
+        UserProfileResponseDTO response =
+                service.create(dto);
+
+        log.info("Perfil creado con ID: {}",
+                response.getId());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(service.create(dto));
+                .body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<UserProfileResponseDTO>>
-    getAll(){
+    getAll() {
 
-        log.info("GET perfiles");
+        log.info("GET /api/users - Listando perfiles");
 
-        return ResponseEntity.ok(
-                service.getAll());
+        List<UserProfileResponseDTO> response =
+                service.getAll();
+
+        log.info("Perfiles encontrados: {}",
+                response.size());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserProfileResponseDTO>
-    getById(@PathVariable Long id){
+    getById(@PathVariable Long id) {
 
-        log.info("GET perfil ID {}", id);
+        log.info("GET /api/users/{} - Buscando perfil por ID",
+                id);
 
         return ResponseEntity.ok(
                 service.getById(id));
@@ -66,21 +79,31 @@ public class UserProfileController {
     update(
             @PathVariable Long id,
             @Valid @RequestBody
-            UserProfileRequestDTO dto){
+            UserProfileRequestDTO dto) {
 
-        log.info("PUT perfil ID {}", id);
+        log.info("PUT /api/users/{} - Actualizando perfil",
+                id);
 
-        return ResponseEntity.ok(
-                service.update(id, dto));
+        UserProfileResponseDTO response =
+                service.update(id, dto);
+
+        log.info("Perfil actualizado con ID: {}",
+                response.getId());
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>
-    delete(@PathVariable Long id){
+    delete(@PathVariable Long id) {
 
-        log.info("DELETE perfil ID {}", id);
+        log.info("DELETE /api/users/{} - Eliminando perfil lógico",
+                id);
 
         service.delete(id);
+
+        log.info("Perfil eliminado correctamente ID: {}",
+                id);
 
         return ResponseEntity
                 .noContent()

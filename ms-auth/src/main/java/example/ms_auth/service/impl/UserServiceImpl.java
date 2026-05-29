@@ -25,18 +25,24 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
-    private final BCryptPasswordEncoder passwordEncoder =
-            new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public UserResponseDTO createUser(UserRequestDTO dto) {
 
-        log.info("Creando usuario con email {}", dto.getEmail());
+        log.info("Creando usuario con email: {}", dto.getEmail());
+
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            log.warn("Intento de registrar email duplicado: {}", dto.getEmail());
+            throw new IllegalArgumentException("Ya existe un usuario con ese email");
+        }
 
         Role role = roleRepository.findById(dto.getRoleId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Rol no encontrado"));
+                .orElseThrow(() -> {
+                    log.warn("Rol no encontrado con ID: {}", dto.getRoleId());
+                    return new ResourceNotFoundException(
+                            "Rol no encontrado con ID: " + dto.getRoleId());
+                });
 
         User user = User.builder()
                 .username(dto.getUsername())
@@ -47,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
         User saved = userRepository.save(user);
 
-        log.info("Usuario creado correctamente ID {}", saved.getId());
+        log.info("Usuario creado correctamente con ID: {}", saved.getId());
 
         return mapToDTO(saved);
     }
@@ -55,22 +61,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseDTO> getAllUsers() {
 
-        log.info("Listando usuarios");
+        log.info("Listando usuarios auth");
 
-        return userRepository.findAll()
+        List<UserResponseDTO> users = userRepository.findAll()
                 .stream()
                 .map(this::mapToDTO)
                 .toList();
+
+        log.info("Usuarios auth encontrados: {}", users.size());
+
+        return users;
     }
 
     @Override
     public UserResponseDTO getUserById(Long id) {
 
-        log.info("Buscando usuario ID {}", id);
+        log.info("Buscando usuario auth ID: {}", id);
 
         User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> {
+                    log.warn("Usuario no encontrado con ID: {}", id);
+                    return new ResourceNotFoundException(
+                            "Usuario no encontrado con ID: " + id);
+                });
 
         return mapToDTO(user);
     }
@@ -78,15 +91,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO updateUser(Long id, UserRequestDTO dto) {
 
-        log.info("Actualizando usuario ID {}", id);
+        log.info("Actualizando usuario auth ID: {}", id);
 
         User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> {
+                    log.warn("Usuario no encontrado con ID: {}", id);
+                    return new ResourceNotFoundException(
+                            "Usuario no encontrado con ID: " + id);
+                });
 
         Role role = roleRepository.findById(dto.getRoleId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Rol no encontrado"));
+                .orElseThrow(() -> {
+                    log.warn("Rol no encontrado con ID: {}", dto.getRoleId());
+                    return new ResourceNotFoundException(
+                            "Rol no encontrado con ID: " + dto.getRoleId());
+                });
 
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
@@ -95,7 +114,7 @@ public class UserServiceImpl implements UserService {
 
         User updated = userRepository.save(user);
 
-        log.info("Usuario actualizado ID {}", updated.getId());
+        log.info("Usuario actualizado correctamente con ID: {}", updated.getId());
 
         return mapToDTO(updated);
     }
@@ -103,18 +122,48 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
 
-        log.info("Eliminando usuario ID {}", id);
+        log.info("Eliminando usuario auth ID: {}", id);
 
         User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> {
+                    log.warn("Usuario no encontrado con ID: {}", id);
+                    return new ResourceNotFoundException(
+                            "Usuario no encontrado con ID: " + id);
+                });
 
         userRepository.delete(user);
 
-        log.info("Usuario eliminado ID {}", id);
+        log.info("Usuario eliminado correctamente con ID: {}", id);
     }
 
-    private UserResponseDTO mapToDTO(User user){
+    @Override
+    public LoginResponseDTO login(LoginRequestDTO dto) {
+
+        log.info("Intento de login con email: {}", dto.getEmail());
+
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> {
+                    log.warn("Usuario no encontrado para login: {}", dto.getEmail());
+                    return new ResourceNotFoundException("Usuario no encontrado");
+                });
+
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            log.warn("Contraseña incorrecta para email: {}", dto.getEmail());
+            throw new IllegalArgumentException("Contraseña incorrecta");
+        }
+
+        log.info("Login exitoso para email: {}", dto.getEmail());
+
+        return LoginResponseDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole().getName())
+                .message("Login exitoso")
+                .build();
+    }
+
+    private UserResponseDTO mapToDTO(User user) {
 
         return UserResponseDTO.builder()
                 .id(user.getId())
@@ -123,23 +172,4 @@ public class UserServiceImpl implements UserService {
                 .role(user.getRole().getName())
                 .build();
     }
-       @Override
-      public LoginResponseDTO login(LoginRequestDTO dto) {
-
-         User user = userRepository.findByEmail(dto.getEmail())
-            .orElseThrow(() ->
-                    new ResourceNotFoundException("Usuario no encontrado"));
-
-       if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-           throw new RuntimeException("Contraseña incorrecta");
-        }
-
-        return LoginResponseDTO.builder()
-            .id(user.getId())
-            .username(user.getUsername())
-            .email(user.getEmail())
-            .role(user.getRole().getName())
-            .message("Login exitoso")
-            .build();
-        }
 }

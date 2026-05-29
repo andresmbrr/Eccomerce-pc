@@ -1,0 +1,23 @@
+CREATE DATABASE IF NOT EXISTS ms_auth_db;
+
+USE ms_auth_db;
+
+CREATE TABLE IF NOT EXISTS roles (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(80) NOT NULL,
+    email VARCHAR(120) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role_id BIGINT NOT NULL,
+    CONSTRAINT fk_users_roles
+        FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+INSERT INTO roles (name) VALUES
+('ADMIN'),
+('CLIENTE'),
+('OPERADOR');

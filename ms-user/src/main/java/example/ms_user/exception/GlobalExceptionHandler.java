@@ -10,36 +10,31 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import lombok.extern.slf4j.Slf4j;
+
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> handleNotFound(
-            ResourceNotFoundException ex){
+    public ResponseEntity<Object> handleNotFound(
+            ResourceNotFoundException ex) {
 
-        Map<String, Object> response =
-                new HashMap<>();
-
-        response.put(
-                "timestamp",
-                LocalDateTime.now());
-
-        response.put(
-                "error",
+        log.warn("Recurso no encontrado en ms-user: {}",
                 ex.getMessage());
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(response);
+        return buildResponse(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage());
     }
 
-    @ExceptionHandler(
-            MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleValidation(
-            MethodArgumentNotValidException ex){
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleValidation(
+            MethodArgumentNotValidException ex) {
 
-        Map<String, String> errors =
-                new HashMap<>();
+        log.warn("Error de validación en ms-user");
+
+        Map<String, String> errors = new HashMap<>();
 
         ex.getBindingResult()
                 .getFieldErrors()
@@ -49,8 +44,39 @@ public class GlobalExceptionHandler {
                                 error.getDefaultMessage()
                         ));
 
-        return ResponseEntity
-                .badRequest()
-                .body(errors);
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("errors", errors);
+
+        return new ResponseEntity<>(
+                body,
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleGeneral(
+            Exception ex) {
+
+        log.error("Error interno en ms-user", ex);
+
+        return buildResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error interno del servidor");
+    }
+
+    private ResponseEntity<Object> buildResponse(
+            HttpStatus status,
+            String message) {
+
+        Map<String, Object> body = new HashMap<>();
+
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", status.value());
+        body.put("message", message);
+
+        return new ResponseEntity<>(
+                body,
+                status);
     }
 }

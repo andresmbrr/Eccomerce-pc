@@ -25,7 +25,7 @@ public class UserProfileServiceImpl
     public UserProfileResponseDTO create(
             UserProfileRequestDTO dto) {
 
-        log.info("Creando perfil usuario {}",
+        log.info("Creando perfil para authUserId: {}",
                 dto.getAuthUserId());
 
         UserProfile profile = UserProfile.builder()
@@ -35,12 +35,12 @@ public class UserProfileServiceImpl
                 .phone(dto.getPhone())
                 .address(dto.getAddress())
                 .birthDate(dto.getBirthDate())
-                .active(dto.getActive())
+                .active(true)
                 .build();
 
         UserProfile saved = repository.save(profile);
 
-        log.info("Perfil creado ID {}",
+        log.info("Perfil creado correctamente con ID: {}",
                 saved.getId());
 
         return mapToDTO(saved);
@@ -49,23 +49,37 @@ public class UserProfileServiceImpl
     @Override
     public List<UserProfileResponseDTO> getAll() {
 
-        log.info("Listando perfiles");
+        log.info("Listando perfiles activos");
 
-        return repository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+        List<UserProfileResponseDTO> profiles =
+                repository.findAll()
+                        .stream()
+                        .filter(profile ->
+                                Boolean.TRUE.equals(profile.getActive()))
+                        .map(this::mapToDTO)
+                        .toList();
+
+        log.info("Perfiles activos encontrados: {}",
+                profiles.size());
+
+        return profiles;
     }
 
     @Override
     public UserProfileResponseDTO getById(Long id) {
 
-        log.info("Buscando perfil ID {}", id);
+        log.info("Buscando perfil con ID: {}",
+                id);
 
         UserProfile profile = repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Perfil no encontrado"));
+                .orElseThrow(() -> {
+
+                    log.warn("Perfil no encontrado con ID: {}",
+                            id);
+
+                    return new ResourceNotFoundException(
+                            "Perfil no encontrado con ID: " + id);
+                });
 
         return mapToDTO(profile);
     }
@@ -75,23 +89,33 @@ public class UserProfileServiceImpl
             Long id,
             UserProfileRequestDTO dto) {
 
-        log.info("Actualizando perfil ID {}", id);
+        log.info("Actualizando perfil con ID: {}",
+                id);
 
         UserProfile profile = repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Perfil no encontrado"));
+                .orElseThrow(() -> {
 
+                    log.warn("No se pudo actualizar. Perfil no encontrado con ID: {}",
+                            id);
+
+                    return new ResourceNotFoundException(
+                            "Perfil no encontrado con ID: " + id);
+                });
+
+        profile.setAuthUserId(dto.getAuthUserId());
         profile.setFirstName(dto.getFirstName());
         profile.setLastName(dto.getLastName());
         profile.setPhone(dto.getPhone());
         profile.setAddress(dto.getAddress());
         profile.setBirthDate(dto.getBirthDate());
-        profile.setActive(dto.getActive());
+
+        if (dto.getActive() != null) {
+            profile.setActive(dto.getActive());
+        }
 
         UserProfile updated = repository.save(profile);
 
-        log.info("Perfil actualizado ID {}",
+        log.info("Perfil actualizado correctamente con ID: {}",
                 updated.getId());
 
         return mapToDTO(updated);
@@ -100,20 +124,28 @@ public class UserProfileServiceImpl
     @Override
     public void delete(Long id) {
 
-        log.info("Eliminando perfil ID {}", id);
+        log.info("Eliminando lógicamente perfil con ID: {}",
+                id);
 
         UserProfile profile = repository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Perfil no encontrado"));
+                .orElseThrow(() -> {
 
-        repository.delete(profile);
+                    log.warn("No se pudo eliminar. Perfil no encontrado con ID: {}",
+                            id);
 
-        log.info("Perfil eliminado ID {}", id);
+                    return new ResourceNotFoundException(
+                            "Perfil no encontrado con ID: " + id);
+                });
+
+        profile.setActive(false);
+        repository.save(profile);
+
+        log.info("Perfil desactivado correctamente con ID: {}",
+                id);
     }
 
     private UserProfileResponseDTO mapToDTO(
-            UserProfile profile){
+            UserProfile profile) {
 
         return UserProfileResponseDTO.builder()
                 .id(profile.getId())

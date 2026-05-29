@@ -12,6 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RoleRequestDTO {
 
-    @NotBlank(message = "Nombre obligatorio")
+    @NotBlank(message = "El nombre del rol es obligatorio")
     private String name;
 }
