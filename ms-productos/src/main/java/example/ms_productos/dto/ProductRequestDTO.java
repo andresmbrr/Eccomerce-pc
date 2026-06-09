@@ -29,9 +29,9 @@ public class ProductRequestDTO {
     @Positive(message = "El precio debe ser positivo")
     private BigDecimal price;
 
-    @NotBlank(message = "La categoría es obligatoria")
-    @Size(min = 3, max = 80, message = "La categoría debe tener entre 3 y 80 caracteres")
-    private String category;
+    @NotNull(message = "La categoría es obligatoria")
+    @Positive(message = "El ID de la categoría debe ser positivo")
+    private Long categoryId;
 
     private Boolean active;
 }

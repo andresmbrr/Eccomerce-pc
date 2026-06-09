@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Ecommerce-PC EV2 - Microservicios Completo",
-    "description": "Colección Postman completa para probar Ecommerce-PC por API Gateway, incluyendo ms-auth, ms-user, validaciones y microservicios de negocio.",
+    "description": "Colección Postman completa para probar Ecommerce-PC por API Gateway, incluyendo ms-categorias y la integración Feign ms-productos -> ms-categorias mediante categoryId.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -519,7 +519,7 @@
       "name": "Productos",
       "item": [
         {
-          "name": "Crear producto",
+          "name": "Crear producto con categoría existente (Feign)",
           "request": {
             "method": "POST",
             "header": [
@@ -536,7 +536,30 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Teclado Redragon Kumara\",\n  \"description\": \"Teclado mecánico gamer con switches blue\",\n  \"price\": 39990,\n  \"category\": \"Perifericos\",\n  \"active\": true\n}"
+              "raw": "{\n  \"name\": \"Teclado Redragon Kumara\",\n  \"description\": \"Teclado mecánico gamer con switches blue\",\n  \"price\": 39990,\n  \"categoryId\": 1,\n  \"active\": true\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Error Feign categoría inexistente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/productos",
+              "host": [
+                "{{gateway}}/api/productos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mouse Logitech G502\",\n  \"description\": \"Mouse gamer con sensor óptico\",\n  \"price\": 49990,\n  \"categoryId\": 999,\n  \"active\": true\n}"
             }
           },
           "response": []
@@ -616,7 +639,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Notebook Lenovo Legion 5 Pro\",\n  \"description\": \"Notebook gamer actualizado con RTX y SSD\",\n  \"price\": 1199990,\n  \"category\": \"Notebook\",\n  \"active\": true\n}"
+              "raw": "{\n  \"name\": \"Notebook Lenovo Legion 5 Pro\",\n  \"description\": \"Notebook gamer actualizado con RTX y SSD\",\n  \"price\": 1199990,\n  \"categoryId\": 1,\n  \"active\": true\n}"
             }
           },
           "response": []
@@ -641,7 +664,7 @@
           "response": []
         },
         {
-          "name": "Validación fallida",
+          "name": "Validación fallida producto",
           "request": {
             "method": "POST",
             "header": [
@@ -658,7 +681,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"\",\n  \"description\": \"abc\",\n  \"price\": -100,\n  \"category\": \"\",\n  \"active\": true\n}"
+              "raw": "{\n  \"name\": \"\",\n  \"description\": \"abc\",\n  \"price\": -100,\n  \"categoryId\": 0,\n  \"active\": true\n}"
             }
           },
           "response": []
