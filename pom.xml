@@ -42,6 +42,7 @@
     <module>ms-pedidos</module>
     <module>ms-pagos</module>
     <module>ms-reviews</module>
+    <module>ms-categorias</module>
     <module>ms-notificaciones</module>
 </modules>
 

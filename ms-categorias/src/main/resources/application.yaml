@@ -1,12 +1,12 @@
 server:
-  port: 8086
+  port: 8090
 
 spring:
   application:
-    name: ms-pedidos
+    name: ms-categorias
 
   datasource:
-    url: jdbc:mysql://localhost:3307/ms_pedidos_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/ms_categorias_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver

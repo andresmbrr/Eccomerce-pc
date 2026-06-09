@@ -21,7 +21,12 @@ spring:
           uri: lb://ms-user
           predicates:
             - Path=/api/users/**
-
+            
+        - id: ms-categorias
+          uri: lb://ms-categorias
+          predicates:
+            - Path=/api/categorias/**
+            
         - id: ms-productos
           uri: lb://ms-productos
           predicates:
