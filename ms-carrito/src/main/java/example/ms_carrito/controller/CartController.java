@@ -15,6 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import example.ms_carrito.dto.CartRequestDTO;
 import example.ms_carrito.dto.CartResponseDTO;
 import example.ms_carrito.service.CartService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +29,41 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/carrito")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(
+        name = "Carrito",
+        description = "Endpoints para administrar el carrito de compras. Este microservicio se comunica mediante Feign con productos y stock."
+)
 public class CartController {
 
     private final CartService service;
 
     @PostMapping
+    @Operation(
+            summary = "Agregar producto al carrito",
+            description = "Permite agregar un producto al carrito de un usuario. El microservicio valida el producto y el stock disponible usando comunicación Feign."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Producto agregado correctamente al carrito",
+                    content = @Content(schema = @Schema(implementation = CartResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error de validación en los datos enviados o stock insuficiente",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Producto, stock o recurso no encontrado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<CartResponseDTO> addToCart(
             @Valid @RequestBody CartRequestDTO dto) {
 
@@ -43,6 +79,27 @@ public class CartController {
     }
 
     @GetMapping("/user/{userId}")
+    @Operation(
+            summary = "Consultar carrito por usuario",
+            description = "Obtiene todos los productos activos que se encuentran en el carrito de un usuario específico."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Carrito obtenido correctamente",
+                    content = @Content(schema = @Schema(implementation = CartResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuario o carrito no encontrado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<List<CartResponseDTO>> getCartByUser(
             @PathVariable Long userId) {
 
@@ -59,6 +116,27 @@ public class CartController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Eliminar item del carrito",
+            description = "Elimina un producto específico del carrito mediante su ID."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Item eliminado correctamente del carrito",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Item del carrito no encontrado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<Void> removeItem(
             @PathVariable Long id) {
 
@@ -73,6 +151,27 @@ public class CartController {
     }
 
     @DeleteMapping("/user/{userId}")
+    @Operation(
+            summary = "Limpiar carrito de usuario",
+            description = "Elimina todos los productos del carrito asociados a un usuario específico."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Carrito limpiado correctamente",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Carrito o usuario no encontrado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<Void> clearCart(
             @PathVariable Long userId) {
 
