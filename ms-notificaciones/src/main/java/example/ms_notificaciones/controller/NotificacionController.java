@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import example.ms_notificaciones.dto.NotificacionRequestDTO;
 import example.ms_notificaciones.dto.NotificacionResponseDTO;
 import example.ms_notificaciones.service.NotificacionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +30,36 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/notificaciones")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(
+        name = "Notificaciones",
+        description = "Endpoints para administrar las notificaciones enviadas a los usuarios del ecommerce"
+)
 public class NotificacionController {
 
     private final NotificacionService service;
 
     @PostMapping
+    @Operation(
+            summary = "Crear notificación",
+            description = "Permite registrar una nueva notificación asociada a un usuario. Puede representar mensajes de pago, pedido, envío u otros eventos del sistema."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Notificación creada correctamente",
+                    content = @Content(schema = @Schema(implementation = NotificacionResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error de validación en los datos enviados",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<NotificacionResponseDTO>
     crearNotificacion(
             @Valid @RequestBody NotificacionRequestDTO dto) {
@@ -47,6 +78,22 @@ public class NotificacionController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "Listar notificaciones",
+            description = "Obtiene todas las notificaciones activas registradas en el sistema."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Notificaciones obtenidas correctamente",
+                    content = @Content(schema = @Schema(implementation = NotificacionResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<List<NotificacionResponseDTO>>
     listarNotificaciones() {
 
@@ -62,6 +109,27 @@ public class NotificacionController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Buscar notificación por ID",
+            description = "Busca una notificación específica utilizando su ID."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Notificación encontrada correctamente",
+                    content = @Content(schema = @Schema(implementation = NotificacionResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Notificación no encontrada",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<NotificacionResponseDTO>
     buscarPorId(@PathVariable Long id) {
 
@@ -73,6 +141,27 @@ public class NotificacionController {
     }
 
     @GetMapping("/usuario/{userId}")
+    @Operation(
+            summary = "Buscar notificaciones por usuario",
+            description = "Obtiene todas las notificaciones activas asociadas a un usuario específico."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Notificaciones del usuario obtenidas correctamente",
+                    content = @Content(schema = @Schema(implementation = NotificacionResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuario o notificaciones no encontradas",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<List<NotificacionResponseDTO>>
     buscarPorUsuario(
             @PathVariable Long userId) {
@@ -85,6 +174,32 @@ public class NotificacionController {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Actualizar notificación",
+            description = "Actualiza los datos de una notificación existente, incluyendo usuario, título, mensaje y tipo."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Notificación actualizada correctamente",
+                    content = @Content(schema = @Schema(implementation = NotificacionResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error de validación en los datos enviados",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Notificación no encontrada",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<NotificacionResponseDTO>
     actualizarNotificacion(
             @PathVariable Long id,
@@ -103,6 +218,27 @@ public class NotificacionController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Eliminar notificación",
+            description = "Realiza una eliminación lógica de la notificación, dejando el registro inactivo."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Notificación eliminada correctamente",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Notificación no encontrada",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<Void>
     eliminarNotificacion(@PathVariable Long id) {
 
