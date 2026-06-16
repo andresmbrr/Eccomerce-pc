@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import example.ms_reviews.dto.ReviewRequestDTO;
 import example.ms_reviews.dto.ReviewResponseDTO;
 import example.ms_reviews.service.ReviewService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +30,36 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(
+        name = "Reviews",
+        description = "Endpoints para administrar reseñas y calificaciones de productos realizadas por usuarios"
+)
 public class ReviewController {
 
     private final ReviewService service;
 
     @PostMapping
+    @Operation(
+            summary = "Crear review",
+            description = "Permite registrar una nueva reseña asociada a un usuario y a un producto. La calificación debe estar dentro del rango permitido."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Review creada correctamente",
+                    content = @Content(schema = @Schema(implementation = ReviewResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error de validación en los datos enviados",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<ReviewResponseDTO>
     crearReview(
             @Valid @RequestBody ReviewRequestDTO dto) {
@@ -47,6 +78,22 @@ public class ReviewController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "Listar reviews",
+            description = "Obtiene todas las reviews activas registradas en el sistema."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Reviews obtenidas correctamente",
+                    content = @Content(schema = @Schema(implementation = ReviewResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<List<ReviewResponseDTO>>
     listarReviews() {
 
@@ -62,6 +109,27 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Buscar review por ID",
+            description = "Busca una review específica utilizando su ID."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Review encontrada correctamente",
+                    content = @Content(schema = @Schema(implementation = ReviewResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Review no encontrada",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<ReviewResponseDTO>
     buscarPorId(@PathVariable Long id) {
 
@@ -73,6 +141,22 @@ public class ReviewController {
     }
 
     @GetMapping("/producto/{productId}")
+    @Operation(
+            summary = "Buscar reviews por producto",
+            description = "Obtiene todas las reviews activas asociadas a un producto específico."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Reviews del producto obtenidas correctamente",
+                    content = @Content(schema = @Schema(implementation = ReviewResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<List<ReviewResponseDTO>>
     buscarPorProducto(
             @PathVariable Long productId) {
@@ -85,6 +169,22 @@ public class ReviewController {
     }
 
     @GetMapping("/usuario/{userId}")
+    @Operation(
+            summary = "Buscar reviews por usuario",
+            description = "Obtiene todas las reviews activas realizadas por un usuario específico."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Reviews del usuario obtenidas correctamente",
+                    content = @Content(schema = @Schema(implementation = ReviewResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<List<ReviewResponseDTO>>
     buscarPorUsuario(
             @PathVariable Long userId) {
@@ -97,6 +197,32 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Actualizar review",
+            description = "Actualiza los datos de una review existente, incluyendo usuario, producto, calificación y comentario."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Review actualizada correctamente",
+                    content = @Content(schema = @Schema(implementation = ReviewResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error de validación en los datos enviados",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Review no encontrada",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<ReviewResponseDTO>
     actualizarReview(
             @PathVariable Long id,
@@ -115,6 +241,27 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Eliminar review",
+            description = "Realiza una eliminación lógica de la review, dejando el registro inactivo."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Review eliminada correctamente",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Review no encontrada",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<Void>
     eliminarReview(@PathVariable Long id) {
 
