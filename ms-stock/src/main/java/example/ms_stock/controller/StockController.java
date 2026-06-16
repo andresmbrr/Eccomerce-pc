@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import example.ms_stock.dto.StockRequestDTO;
 import example.ms_stock.dto.StockResponseDTO;
 import example.ms_stock.service.StockService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +30,41 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/stock")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(
+        name = "Stock",
+        description = "Endpoints para administrar el inventario y disponibilidad de productos"
+)
 public class StockController {
 
     private final StockService service;
 
     @PostMapping
+    @Operation(
+            summary = "Crear stock",
+            description = "Permite registrar stock para un producto específico, indicando cantidad disponible y estado de disponibilidad."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Stock creado correctamente",
+                    content = @Content(schema = @Schema(implementation = StockResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error de validación en los datos enviados",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Ya existe stock registrado para ese producto",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<StockResponseDTO>
     createStock(
             @Valid @RequestBody StockRequestDTO dto) {
@@ -47,6 +83,22 @@ public class StockController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "Listar stock",
+            description = "Obtiene todos los registros de stock activos del sistema."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Stock obtenido correctamente",
+                    content = @Content(schema = @Schema(implementation = StockResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<List<StockResponseDTO>>
     getAllStock() {
 
@@ -62,6 +114,27 @@ public class StockController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Buscar stock por ID",
+            description = "Busca un registro de stock específico utilizando su ID."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Stock encontrado correctamente",
+                    content = @Content(schema = @Schema(implementation = StockResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Stock no encontrado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<StockResponseDTO>
     getStockById(
             @PathVariable Long id) {
@@ -79,6 +152,27 @@ public class StockController {
     }
 
     @GetMapping("/product/{productId}")
+    @Operation(
+            summary = "Buscar stock por producto",
+            description = "Obtiene el stock asociado a un producto específico utilizando el ID del producto."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Stock del producto obtenido correctamente",
+                    content = @Content(schema = @Schema(implementation = StockResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Stock no encontrado para el producto indicado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<StockResponseDTO>
     getStockByProductId(
             @PathVariable Long productId) {
@@ -96,6 +190,32 @@ public class StockController {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Actualizar stock",
+            description = "Actualiza la cantidad disponible y el estado de disponibilidad de un registro de stock existente."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Stock actualizado correctamente",
+                    content = @Content(schema = @Schema(implementation = StockResponseDTO.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Error de validación en los datos enviados",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Stock no encontrado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<StockResponseDTO>
     updateStock(
             @PathVariable Long id,
@@ -114,6 +234,27 @@ public class StockController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Eliminar stock",
+            description = "Realiza una eliminación lógica del stock, dejando el registro no disponible o inactivo."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Stock eliminado correctamente",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Stock no encontrado",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content
+            )
+    })
     public ResponseEntity<Void>
     deleteStock(
             @PathVariable Long id) {
