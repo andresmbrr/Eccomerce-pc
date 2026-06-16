@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Ecommerce-PC EV2 - Microservicios Completo",
-    "description": "Colección Postman completa para probar Ecommerce-PC por API Gateway, incluyendo ms-categorias y la integración Feign ms-productos -> ms-categorias mediante categoryId.",
+    "name": "Ecommerce-PC EV2 Final - Gateway",
+    "description": "Colección final centralizada por API Gateway. Usa category como String en ms-productos y no categoryId.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -12,7 +12,7 @@
   ],
   "item": [
     {
-      "name": "Auth",
+      "name": "01 - Auth",
       "item": [
         {
           "name": "Crear rol ADMIN",
@@ -25,14 +25,31 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/auth/roles",
-              "host": [
-                "{{gateway}}/api/auth/roles"
-              ]
+              "raw": "{{gateway}}/api/auth/roles"
             },
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"ADMIN\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear rol CLIENTE",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/roles"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"CLIENTE\"\n}"
             }
           },
           "response": []
@@ -48,10 +65,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/auth/roles",
-              "host": [
-                "{{gateway}}/api/auth/roles"
-              ]
+              "raw": "{{gateway}}/api/auth/roles"
             }
           },
           "response": []
@@ -67,10 +81,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/auth/register",
-              "host": [
-                "{{gateway}}/api/auth/register"
-              ]
+              "raw": "{{gateway}}/api/auth/register"
             },
             "body": {
               "mode": "raw",
@@ -90,10 +101,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/auth/login",
-              "host": [
-                "{{gateway}}/api/auth/login"
-              ]
+              "raw": "{{gateway}}/api/auth/login"
             },
             "body": {
               "mode": "raw",
@@ -113,10 +121,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/auth/users",
-              "host": [
-                "{{gateway}}/api/auth/users"
-              ]
+              "raw": "{{gateway}}/api/auth/users"
             }
           },
           "response": []
@@ -132,10 +137,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/auth/users/1",
-              "host": [
-                "{{gateway}}/api/auth/users/1"
-              ]
+              "raw": "{{gateway}}/api/auth/users/1"
             }
           },
           "response": []
@@ -151,10 +153,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/auth/users/1",
-              "host": [
-                "{{gateway}}/api/auth/users/1"
-              ]
+              "raw": "{{gateway}}/api/auth/users/1"
             },
             "body": {
               "mode": "raw",
@@ -174,10 +173,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/auth/users/1",
-              "host": [
-                "{{gateway}}/api/auth/users/1"
-              ]
+              "raw": "{{gateway}}/api/auth/users/1"
             }
           },
           "response": []
@@ -193,14 +189,31 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/auth/roles",
-              "host": [
-                "{{gateway}}/api/auth/roles"
-              ]
+              "raw": "{{gateway}}/api/auth/roles"
             },
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Error rol duplicado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/auth/roles"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"ADMIN\"\n}"
             }
           },
           "response": []
@@ -216,10 +229,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/auth/register",
-              "host": [
-                "{{gateway}}/api/auth/register"
-              ]
+              "raw": "{{gateway}}/api/auth/register"
             },
             "body": {
               "mode": "raw",
@@ -239,10 +249,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/auth/login",
-              "host": [
-                "{{gateway}}/api/auth/login"
-              ]
+              "raw": "{{gateway}}/api/auth/login"
             },
             "body": {
               "mode": "raw",
@@ -254,7 +261,7 @@
       ]
     },
     {
-      "name": "Users",
+      "name": "02 - Users",
       "item": [
         {
           "name": "Crear perfil usuario",
@@ -267,10 +274,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/users",
-              "host": [
-                "{{gateway}}/api/users"
-              ]
+              "raw": "{{gateway}}/api/users"
             },
             "body": {
               "mode": "raw",
@@ -290,10 +294,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/users",
-              "host": [
-                "{{gateway}}/api/users"
-              ]
+              "raw": "{{gateway}}/api/users"
             }
           },
           "response": []
@@ -309,10 +310,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/users/1",
-              "host": [
-                "{{gateway}}/api/users/1"
-              ]
+              "raw": "{{gateway}}/api/users/1"
             }
           },
           "response": []
@@ -328,10 +326,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/users/1",
-              "host": [
-                "{{gateway}}/api/users/1"
-              ]
+              "raw": "{{gateway}}/api/users/1"
             },
             "body": {
               "mode": "raw",
@@ -351,10 +346,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/users/1",
-              "host": [
-                "{{gateway}}/api/users/1"
-              ]
+              "raw": "{{gateway}}/api/users/1"
             }
           },
           "response": []
@@ -370,10 +362,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/users",
-              "host": [
-                "{{gateway}}/api/users"
-              ]
+              "raw": "{{gateway}}/api/users"
             },
             "body": {
               "mode": "raw",
@@ -385,10 +374,10 @@
       ]
     },
     {
-      "name": "Categorias",
+      "name": "03 - Categorias",
       "item": [
         {
-          "name": "Crear categoría",
+          "name": "Crear categoría Notebook",
           "request": {
             "method": "POST",
             "header": [
@@ -398,14 +387,31 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/categorias",
-              "host": [
-                "{{gateway}}/api/categorias"
-              ]
+              "raw": "{{gateway}}/api/categorias"
             },
             "body": {
               "mode": "raw",
               "raw": "{\n  \"nombre\": \"Notebook\",\n  \"descripcion\": \"Computadores portátiles para trabajo, estudio y gaming\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear categoría Perifericos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway}}/api/categorias"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Perifericos\",\n  \"descripcion\": \"Teclados, mouse, audífonos y accesorios para computador\"\n}"
             }
           },
           "response": []
@@ -421,10 +427,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/categorias",
-              "host": [
-                "{{gateway}}/api/categorias"
-              ]
+              "raw": "{{gateway}}/api/categorias"
             }
           },
           "response": []
@@ -440,10 +443,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/categorias/1",
-              "host": [
-                "{{gateway}}/api/categorias/1"
-              ]
+              "raw": "{{gateway}}/api/categorias/1"
             }
           },
           "response": []
@@ -459,10 +459,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/categorias/1",
-              "host": [
-                "{{gateway}}/api/categorias/1"
-              ]
+              "raw": "{{gateway}}/api/categorias/1"
             },
             "body": {
               "mode": "raw",
@@ -482,16 +479,13 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/categorias/1",
-              "host": [
-                "{{gateway}}/api/categorias/1"
-              ]
+              "raw": "{{gateway}}/api/categorias/1"
             }
           },
           "response": []
         },
         {
-          "name": "Validación fallida",
+          "name": "Error validación categoría",
           "request": {
             "method": "POST",
             "header": [
@@ -501,10 +495,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/categorias",
-              "host": [
-                "{{gateway}}/api/categorias"
-              ]
+              "raw": "{{gateway}}/api/categorias"
             },
             "body": {
               "mode": "raw",
@@ -516,10 +507,10 @@
       ]
     },
     {
-      "name": "Productos",
+      "name": "04 - Productos",
       "item": [
         {
-          "name": "Crear producto con categoría existente (Feign)",
+          "name": "Crear producto",
           "request": {
             "method": "POST",
             "header": [
@@ -529,20 +520,17 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/productos",
-              "host": [
-                "{{gateway}}/api/productos"
-              ]
+              "raw": "{{gateway}}/api/productos"
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Teclado Redragon Kumara\",\n  \"description\": \"Teclado mecánico gamer con switches blue\",\n  \"price\": 39990,\n  \"categoryId\": 1,\n  \"active\": true\n}"
+              "raw": "{\n  \"name\": \"Teclado Redragon Kumara\",\n  \"description\": \"Teclado mecánico gamer con switches blue\",\n  \"price\": 39990,\n  \"category\": \"Perifericos\",\n  \"active\": true\n}"
             }
           },
           "response": []
         },
         {
-          "name": "Error Feign categoría inexistente",
+          "name": "Crear producto notebook",
           "request": {
             "method": "POST",
             "header": [
@@ -552,14 +540,11 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/productos",
-              "host": [
-                "{{gateway}}/api/productos"
-              ]
+              "raw": "{{gateway}}/api/productos"
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Mouse Logitech G502\",\n  \"description\": \"Mouse gamer con sensor óptico\",\n  \"price\": 49990,\n  \"categoryId\": 999,\n  \"active\": true\n}"
+              "raw": "{\n  \"name\": \"Notebook Lenovo Legion 5\",\n  \"description\": \"Notebook gamer con 16GB RAM y SSD\",\n  \"price\": 949990,\n  \"category\": \"Notebook\",\n  \"active\": true\n}"
             }
           },
           "response": []
@@ -575,10 +560,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/productos",
-              "host": [
-                "{{gateway}}/api/productos"
-              ]
+              "raw": "{{gateway}}/api/productos"
             }
           },
           "response": []
@@ -594,16 +576,13 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/productos/1",
-              "host": [
-                "{{gateway}}/api/productos/1"
-              ]
+              "raw": "{{gateway}}/api/productos/1"
             }
           },
           "response": []
         },
         {
-          "name": "Buscar por categoría",
+          "name": "Buscar productos por categoría",
           "request": {
             "method": "GET",
             "header": [
@@ -613,10 +592,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/productos/category/Perifericos",
-              "host": [
-                "{{gateway}}/api/productos/category/Perifericos"
-              ]
+              "raw": "{{gateway}}/api/productos/category/Perifericos"
             }
           },
           "response": []
@@ -632,14 +608,11 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/productos/1",
-              "host": [
-                "{{gateway}}/api/productos/1"
-              ]
+              "raw": "{{gateway}}/api/productos/1"
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Notebook Lenovo Legion 5 Pro\",\n  \"description\": \"Notebook gamer actualizado con RTX y SSD\",\n  \"price\": 1199990,\n  \"categoryId\": 1,\n  \"active\": true\n}"
+              "raw": "{\n  \"name\": \"Teclado Redragon Kumara Pro\",\n  \"description\": \"Teclado mecánico gamer actualizado\",\n  \"price\": 44990,\n  \"category\": \"Perifericos\",\n  \"active\": true\n}"
             }
           },
           "response": []
@@ -655,16 +628,13 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/productos/1",
-              "host": [
-                "{{gateway}}/api/productos/1"
-              ]
+              "raw": "{{gateway}}/api/productos/1"
             }
           },
           "response": []
         },
         {
-          "name": "Validación fallida producto",
+          "name": "Error validación producto",
           "request": {
             "method": "POST",
             "header": [
@@ -674,14 +644,11 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/productos",
-              "host": [
-                "{{gateway}}/api/productos"
-              ]
+              "raw": "{{gateway}}/api/productos"
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"\",\n  \"description\": \"abc\",\n  \"price\": -100,\n  \"categoryId\": 0,\n  \"active\": true\n}"
+              "raw": "{\n  \"name\": \"\",\n  \"description\": \"abc\",\n  \"price\": -100,\n  \"category\": \"\",\n  \"active\": true\n}"
             }
           },
           "response": []
@@ -689,7 +656,7 @@
       ]
     },
     {
-      "name": "Stock",
+      "name": "05 - Stock",
       "item": [
         {
           "name": "Crear stock",
@@ -702,10 +669,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/stock",
-              "host": [
-                "{{gateway}}/api/stock"
-              ]
+              "raw": "{{gateway}}/api/stock"
             },
             "body": {
               "mode": "raw",
@@ -725,10 +689,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/stock",
-              "host": [
-                "{{gateway}}/api/stock"
-              ]
+              "raw": "{{gateway}}/api/stock"
             }
           },
           "response": []
@@ -744,10 +705,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/stock/1",
-              "host": [
-                "{{gateway}}/api/stock/1"
-              ]
+              "raw": "{{gateway}}/api/stock/1"
             }
           },
           "response": []
@@ -763,10 +721,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/stock/product/1",
-              "host": [
-                "{{gateway}}/api/stock/product/1"
-              ]
+              "raw": "{{gateway}}/api/stock/product/1"
             }
           },
           "response": []
@@ -782,10 +737,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/stock/1",
-              "host": [
-                "{{gateway}}/api/stock/1"
-              ]
+              "raw": "{{gateway}}/api/stock/1"
             },
             "body": {
               "mode": "raw",
@@ -805,16 +757,13 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/stock/1",
-              "host": [
-                "{{gateway}}/api/stock/1"
-              ]
+              "raw": "{{gateway}}/api/stock/1"
             }
           },
           "response": []
         },
         {
-          "name": "Validación fallida",
+          "name": "Error validación stock",
           "request": {
             "method": "POST",
             "header": [
@@ -824,10 +773,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/stock",
-              "host": [
-                "{{gateway}}/api/stock"
-              ]
+              "raw": "{{gateway}}/api/stock"
             },
             "body": {
               "mode": "raw",
@@ -839,10 +785,10 @@
       ]
     },
     {
-      "name": "Carrito",
+      "name": "06 - Carrito",
       "item": [
         {
-          "name": "Agregar al carrito",
+          "name": "Agregar producto al carrito",
           "request": {
             "method": "POST",
             "header": [
@@ -852,10 +798,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/carrito",
-              "host": [
-                "{{gateway}}/api/carrito"
-              ]
+              "raw": "{{gateway}}/api/carrito"
             },
             "body": {
               "mode": "raw",
@@ -875,10 +818,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/carrito/user/1",
-              "host": [
-                "{{gateway}}/api/carrito/user/1"
-              ]
+              "raw": "{{gateway}}/api/carrito/user/1"
             }
           },
           "response": []
@@ -894,10 +834,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/carrito/1",
-              "host": [
-                "{{gateway}}/api/carrito/1"
-              ]
+              "raw": "{{gateway}}/api/carrito/1"
             }
           },
           "response": []
@@ -913,16 +850,13 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/carrito/user/1",
-              "host": [
-                "{{gateway}}/api/carrito/user/1"
-              ]
+              "raw": "{{gateway}}/api/carrito/user/1"
             }
           },
           "response": []
         },
         {
-          "name": "Validación fallida",
+          "name": "Error validación carrito",
           "request": {
             "method": "POST",
             "header": [
@@ -932,10 +866,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/carrito",
-              "host": [
-                "{{gateway}}/api/carrito"
-              ]
+              "raw": "{{gateway}}/api/carrito"
             },
             "body": {
               "mode": "raw",
@@ -947,7 +878,7 @@
       ]
     },
     {
-      "name": "Pedidos",
+      "name": "07 - Pedidos",
       "item": [
         {
           "name": "Crear pedido",
@@ -960,10 +891,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pedidos",
-              "host": [
-                "{{gateway}}/api/pedidos"
-              ]
+              "raw": "{{gateway}}/api/pedidos"
             },
             "body": {
               "mode": "raw",
@@ -983,10 +911,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pedidos",
-              "host": [
-                "{{gateway}}/api/pedidos"
-              ]
+              "raw": "{{gateway}}/api/pedidos"
             }
           },
           "response": []
@@ -1002,10 +927,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pedidos/1",
-              "host": [
-                "{{gateway}}/api/pedidos/1"
-              ]
+              "raw": "{{gateway}}/api/pedidos/1"
             }
           },
           "response": []
@@ -1021,10 +943,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pedidos/user/1",
-              "host": [
-                "{{gateway}}/api/pedidos/user/1"
-              ]
+              "raw": "{{gateway}}/api/pedidos/user/1"
             }
           },
           "response": []
@@ -1040,10 +959,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pedidos/1",
-              "host": [
-                "{{gateway}}/api/pedidos/1"
-              ]
+              "raw": "{{gateway}}/api/pedidos/1"
             },
             "body": {
               "mode": "raw",
@@ -1053,7 +969,7 @@
           "response": []
         },
         {
-          "name": "Cambiar estado",
+          "name": "Cambiar estado pedido",
           "request": {
             "method": "PUT",
             "header": [
@@ -1063,10 +979,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pedidos/1/status",
-              "host": [
-                "{{gateway}}/api/pedidos/1/status"
-              ]
+              "raw": "{{gateway}}/api/pedidos/1/status"
             },
             "body": {
               "mode": "raw",
@@ -1086,16 +999,13 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pedidos/1",
-              "host": [
-                "{{gateway}}/api/pedidos/1"
-              ]
+              "raw": "{{gateway}}/api/pedidos/1"
             }
           },
           "response": []
         },
         {
-          "name": "Validación fallida",
+          "name": "Error validación pedido",
           "request": {
             "method": "POST",
             "header": [
@@ -1105,10 +1015,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pedidos",
-              "host": [
-                "{{gateway}}/api/pedidos"
-              ]
+              "raw": "{{gateway}}/api/pedidos"
             },
             "body": {
               "mode": "raw",
@@ -1120,7 +1027,7 @@
       ]
     },
     {
-      "name": "Pagos",
+      "name": "08 - Pagos",
       "item": [
         {
           "name": "Crear pago",
@@ -1133,10 +1040,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pagos",
-              "host": [
-                "{{gateway}}/api/pagos"
-              ]
+              "raw": "{{gateway}}/api/pagos"
             },
             "body": {
               "mode": "raw",
@@ -1156,10 +1060,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pagos",
-              "host": [
-                "{{gateway}}/api/pagos"
-              ]
+              "raw": "{{gateway}}/api/pagos"
             }
           },
           "response": []
@@ -1175,10 +1076,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pagos/1",
-              "host": [
-                "{{gateway}}/api/pagos/1"
-              ]
+              "raw": "{{gateway}}/api/pagos/1"
             }
           },
           "response": []
@@ -1194,10 +1092,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pagos/order/1",
-              "host": [
-                "{{gateway}}/api/pagos/order/1"
-              ]
+              "raw": "{{gateway}}/api/pagos/order/1"
             }
           },
           "response": []
@@ -1213,10 +1108,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pagos/1",
-              "host": [
-                "{{gateway}}/api/pagos/1"
-              ]
+              "raw": "{{gateway}}/api/pagos/1"
             },
             "body": {
               "mode": "raw",
@@ -1236,16 +1128,13 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pagos/1",
-              "host": [
-                "{{gateway}}/api/pagos/1"
-              ]
+              "raw": "{{gateway}}/api/pagos/1"
             }
           },
           "response": []
         },
         {
-          "name": "Validación fallida",
+          "name": "Error validación pago",
           "request": {
             "method": "POST",
             "header": [
@@ -1255,10 +1144,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/pagos",
-              "host": [
-                "{{gateway}}/api/pagos"
-              ]
+              "raw": "{{gateway}}/api/pagos"
             },
             "body": {
               "mode": "raw",
@@ -1270,7 +1156,7 @@
       ]
     },
     {
-      "name": "Notificaciones",
+      "name": "09 - Notificaciones",
       "item": [
         {
           "name": "Crear notificación",
@@ -1283,10 +1169,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/notificaciones",
-              "host": [
-                "{{gateway}}/api/notificaciones"
-              ]
+              "raw": "{{gateway}}/api/notificaciones"
             },
             "body": {
               "mode": "raw",
@@ -1306,16 +1189,13 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/notificaciones",
-              "host": [
-                "{{gateway}}/api/notificaciones"
-              ]
+              "raw": "{{gateway}}/api/notificaciones"
             }
           },
           "response": []
         },
         {
-          "name": "Buscar por ID",
+          "name": "Buscar notificación por ID",
           "request": {
             "method": "GET",
             "header": [
@@ -1325,16 +1205,13 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/notificaciones/1",
-              "host": [
-                "{{gateway}}/api/notificaciones/1"
-              ]
+              "raw": "{{gateway}}/api/notificaciones/1"
             }
           },
           "response": []
         },
         {
-          "name": "Buscar por usuario",
+          "name": "Buscar notificaciones por usuario",
           "request": {
             "method": "GET",
             "header": [
@@ -1344,10 +1221,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/notificaciones/usuario/1",
-              "host": [
-                "{{gateway}}/api/notificaciones/usuario/1"
-              ]
+              "raw": "{{gateway}}/api/notificaciones/usuario/1"
             }
           },
           "response": []
@@ -1363,10 +1237,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/notificaciones/1",
-              "host": [
-                "{{gateway}}/api/notificaciones/1"
-              ]
+              "raw": "{{gateway}}/api/notificaciones/1"
             },
             "body": {
               "mode": "raw",
@@ -1386,16 +1257,13 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/notificaciones/1",
-              "host": [
-                "{{gateway}}/api/notificaciones/1"
-              ]
+              "raw": "{{gateway}}/api/notificaciones/1"
             }
           },
           "response": []
         },
         {
-          "name": "Validación fallida",
+          "name": "Error validación notificación",
           "request": {
             "method": "POST",
             "header": [
@@ -1405,10 +1273,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/notificaciones",
-              "host": [
-                "{{gateway}}/api/notificaciones"
-              ]
+              "raw": "{{gateway}}/api/notificaciones"
             },
             "body": {
               "mode": "raw",
@@ -1420,7 +1285,7 @@
       ]
     },
     {
-      "name": "Reviews",
+      "name": "10 - Reviews",
       "item": [
         {
           "name": "Crear review",
@@ -1433,10 +1298,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/reviews",
-              "host": [
-                "{{gateway}}/api/reviews"
-              ]
+              "raw": "{{gateway}}/api/reviews"
             },
             "body": {
               "mode": "raw",
@@ -1456,10 +1318,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/reviews",
-              "host": [
-                "{{gateway}}/api/reviews"
-              ]
+              "raw": "{{gateway}}/api/reviews"
             }
           },
           "response": []
@@ -1475,10 +1334,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/reviews/1",
-              "host": [
-                "{{gateway}}/api/reviews/1"
-              ]
+              "raw": "{{gateway}}/api/reviews/1"
             }
           },
           "response": []
@@ -1494,10 +1350,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/reviews/producto/1",
-              "host": [
-                "{{gateway}}/api/reviews/producto/1"
-              ]
+              "raw": "{{gateway}}/api/reviews/producto/1"
             }
           },
           "response": []
@@ -1513,10 +1366,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/reviews/usuario/1",
-              "host": [
-                "{{gateway}}/api/reviews/usuario/1"
-              ]
+              "raw": "{{gateway}}/api/reviews/usuario/1"
             }
           },
           "response": []
@@ -1532,10 +1382,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/reviews/1",
-              "host": [
-                "{{gateway}}/api/reviews/1"
-              ]
+              "raw": "{{gateway}}/api/reviews/1"
             },
             "body": {
               "mode": "raw",
@@ -1555,16 +1402,13 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/reviews/1",
-              "host": [
-                "{{gateway}}/api/reviews/1"
-              ]
+              "raw": "{{gateway}}/api/reviews/1"
             }
           },
           "response": []
         },
         {
-          "name": "Validación fallida",
+          "name": "Error validación review",
           "request": {
             "method": "POST",
             "header": [
@@ -1574,10 +1418,7 @@
               }
             ],
             "url": {
-              "raw": "{{gateway}}/api/reviews",
-              "host": [
-                "{{gateway}}/api/reviews"
-              ]
+              "raw": "{{gateway}}/api/reviews"
             },
             "body": {
               "mode": "raw",

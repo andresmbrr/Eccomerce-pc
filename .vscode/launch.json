@@ -1,0 +1,124 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ApiGatewayApplication<api-gateway>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.api_gateway.ApiGatewayApplication",
+            "projectName": "api-gateway",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-EurekaServerApplication<eureka-server>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.eureka_server.EurekaServerApplication",
+            "projectName": "eureka-server",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsAuthApplication<ms-auth>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.ms_auth.MsAuthApplication",
+            "projectName": "ms-auth",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsCarritoApplication<ms-carrito>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.ms_carrito.MsCarritoApplication",
+            "projectName": "ms-carrito",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsCategoriasApplication<ms-categorias>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.ms_categorias.MsCategoriasApplication",
+            "projectName": "ms-categorias",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsNotificacionesApplication<ms-notificaciones>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.ms_notificaciones.MsNotificacionesApplication",
+            "projectName": "ms-notificaciones",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsPagosApplication<ms-pagos>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.ms_pagos.MsPagosApplication",
+            "projectName": "ms-pagos",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsPedidosApplication<ms-pedidos>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.ms_pedidos.MsPedidosApplication",
+            "projectName": "ms-pedidos",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsProductosApplication<ms-productos>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.ms_productos.MsProductosApplication",
+            "projectName": "ms-productos",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsReviewsApplication<ms-reviews>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.ms_reviews.MsReviewsApplication",
+            "projectName": "ms-reviews",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsStockApplication<ms-stock>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.ms_stock.MsStockApplication",
+            "projectName": "ms-stock",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MsUserApplication<ms-user>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.ms_user.MsUserApplication",
+            "projectName": "ms-user",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
