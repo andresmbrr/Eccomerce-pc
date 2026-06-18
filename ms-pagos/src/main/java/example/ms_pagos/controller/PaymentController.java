@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import static org.mockito.ArgumentMatchers.eq;
 import example.ms_pagos.dto.PaymentRequestDTO;
 import example.ms_pagos.dto.PaymentResponseDTO;
 import example.ms_pagos.service.PaymentService;
@@ -257,4 +257,66 @@ public class PaymentController {
 
         return ResponseEntity.noContent().build();
     }
+        @Test
+        void updatePayment_DeberiaRetornar200() throws Exception {
+
+        // ARRANGE: preparar datos y mocks.
+
+        PaymentRequestDTO request =
+                new PaymentRequestDTO(
+                        100L,
+                        new BigDecimal("20000"),
+                        "TRANSFERENCIA"
+                );
+
+        PaymentResponseDTO response =
+                PaymentResponseDTO.builder()
+                        .id(1L)
+                        .orderId(100L)
+                        .amount(new BigDecimal("20000"))
+                        .paymentMethod("TRANSFERENCIA")
+                        .status(PaymentStatus.APPROVED)
+                        .paymentDate(LocalDateTime.now())
+                        .active(true)
+                        .build();
+
+        when(paymentService.updatePayment(
+                eq(1L),
+                any(PaymentRequestDTO.class)))
+                .thenReturn(response);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        // ACT: ejecutar endpoint.
+
+        mockMvc.perform(
+                        put("/api/pagos/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(request))
+                )
+
+                // ASSERT: verificar resultado esperado.
+                .andExpect(status().isOk());
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(paymentService)
+                .updatePayment(
+                        eq(1L),
+                        any(PaymentRequestDTO.class));
+
+        /*
+        * Caso hipotético de falla para QA:
+        *
+        * Se esperaba:
+        * HTTP 200 OK
+        *
+        * Se obtuvo:
+        * HTTP 404 Not Found
+        *
+        * Revisar:
+        * - existencia del pago
+        * - lógica updatePayment()
+        * - ResourceNotFoundException
+        */
+        }
 }
