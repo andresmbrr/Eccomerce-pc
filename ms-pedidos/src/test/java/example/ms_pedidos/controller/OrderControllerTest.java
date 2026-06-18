@@ -1,6 +1,7 @@
 package example.ms_pedidos.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -10,10 +11,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import example.ms_pedidos.exception.GlobalExceptionHandler;
+import example.ms_pedidos.exception.ResourceNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -44,13 +48,15 @@ class OrderControllerTest {
     @Mock
     private OrderService service;
 
-    @BeforeEach
+        @BeforeEach
     void setUp() {
+
         OrderController controller =
                 new OrderController(service);
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
         objectMapper = new ObjectMapper();
@@ -360,4 +366,127 @@ class OrderControllerTest {
         // Desarrollo debe revisar el método deleteOrder()
         // en OrderController.
     }
+        @Test
+    void getOrderById_debeRetornar404CuandoPedidoNoExiste() throws Exception {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        when(service.getOrderById(id))
+                .thenThrow(
+                        new ResourceNotFoundException(
+                                "Pedido no encontrado con ID: " + id));
+
+        // ACT + ASSERT: ejecutar endpoint y verificar resultado esperado.
+        mockMvc.perform(get("/api/pedidos/{id}", id))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message")
+                        .value("Pedido no encontrado con ID: 999"));
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(service).getOrderById(id);
+
+        // Caso hipotético de falla para QA:
+        // Si se esperaba HTTP 404 Not Found
+        // y se obtiene HTTP 500 Internal Server Error,
+        // el manejo de excepciones del controller
+        // no está funcionando correctamente.
+    }
+        @Test
+    void updateOrder_debeRetornar404CuandoPedidoNoExiste() throws Exception {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        OrderRequestDTO request =
+                new OrderRequestDTO(
+                        1L,
+                        new BigDecimal("1999990")
+                );
+
+        when(service.updateOrder(any(Long.class), any(OrderRequestDTO.class)))
+                .thenThrow(
+                        new ResourceNotFoundException(
+                                "Pedido no encontrado con ID: " + id));
+
+        // ACT + ASSERT: ejecutar endpoint y verificar resultado esperado.
+        mockMvc.perform(put("/api/pedidos/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message")
+                        .value("Pedido no encontrado con ID: 999"));
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(service).updateOrder(any(Long.class), any(OrderRequestDTO.class));
+
+        // Caso hipotético de falla para QA:
+        // Si se esperaba HTTP 404 Not Found
+        // y se obtiene HTTP 200 OK,
+        // el endpoint permite actualizar pedidos inexistentes.
+    }
+        @Test
+    void updateStatus_debeRetornar404CuandoPedidoNoExiste() throws Exception {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        OrderStatusRequestDTO request =
+                new OrderStatusRequestDTO(
+                        OrderStatus.PAID
+                );
+
+        when(service.updateStatus(any(Long.class), any(OrderStatus.class)))
+                .thenThrow(
+                        new ResourceNotFoundException(
+                                "Pedido no encontrado con ID: " + id));
+
+        // ACT + ASSERT: ejecutar endpoint y verificar resultado esperado.
+        mockMvc.perform(put("/api/pedidos/{id}/status", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message")
+                        .value("Pedido no encontrado con ID: 999"));
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(service).updateStatus(any(Long.class), any(OrderStatus.class));
+
+        // Caso hipotético de falla para QA:
+        // Si se esperaba HTTP 404 Not Found
+        // y se obtiene HTTP 200 OK,
+        // el endpoint permite actualizar el estado
+        // de un pedido inexistente.
+    }
+        @Test
+    void deleteOrder_debeRetornar404CuandoPedidoNoExiste() throws Exception {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        doThrow(
+                new ResourceNotFoundException(
+                        "Pedido no encontrado con ID: " + id))
+                .when(service)
+                .deleteOrder(id);
+
+        // ACT + ASSERT: ejecutar endpoint y verificar resultado esperado.
+        mockMvc.perform(delete("/api/pedidos/{id}", id))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message")
+                        .value("Pedido no encontrado con ID: 999"));
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(service).deleteOrder(id);
+
+        // Caso hipotético de falla para QA:
+        // Si se esperaba HTTP 404 Not Found
+        // y se obtiene HTTP 204 No Content,
+        // el endpoint informa una eliminación exitosa
+        // sobre un recurso inexistente.
+}
 }

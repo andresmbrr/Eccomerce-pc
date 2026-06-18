@@ -9,6 +9,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import example.ms_user.exception.ResourceNotFoundException;
+
+import static org.mockito.Mockito.doThrow;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import example.ms_user.dto.UserProfileRequestDTO;
 import example.ms_user.dto.UserProfileResponseDTO;
+import example.ms_user.exception.GlobalExceptionHandler;
 import example.ms_user.service.UserProfileService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +51,7 @@ class UserProfileControllerTest {
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
         objectMapper = new ObjectMapper();
@@ -277,4 +282,63 @@ class UserProfileControllerTest {
         // elimina el perfil, pero no responde con el código HTTP esperado.
         // Desarrollo debe revisar el método delete() del controller.
     }
+        @Test
+        void getById_debeRetornar404CuandoPerfilNoExiste() throws Exception {
+
+        // ARRANGE
+        Long id = 999L;
+
+        when(service.getById(id))
+                .thenThrow(
+                        new ResourceNotFoundException(
+                                "Perfil no encontrado con ID: " + id
+                        )
+                );
+
+        // ACT + ASSERT
+        mockMvc.perform(get("/api/users/{id}", id))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message")
+                        .value("Perfil no encontrado con ID: 999"));
+
+        // VERIFY
+        verify(service).getById(id);
+        }
+                @Test
+        void update_debeRetornar404CuandoPerfilNoExiste() throws Exception {
+
+        // ARRANGE
+        Long id = 999L;
+
+        UserProfileRequestDTO request =
+                new UserProfileRequestDTO(
+                        1L,
+                        "Andres",
+                        "Bustamante",
+                        "912345678",
+                        "Direccion",
+                        LocalDate.of(2000, 5, 10),
+                        true
+                );
+
+        when(service.update(any(Long.class), any(UserProfileRequestDTO.class)))
+                .thenThrow(
+                        new ResourceNotFoundException(
+                                "Perfil no encontrado con ID: " + id
+                        )
+                );
+
+        // ACT + ASSERT
+        mockMvc.perform(put("/api/users/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message")
+                        .value("Perfil no encontrado con ID: 999"));
+
+        // VERIFY
+        verify(service).update(any(Long.class), any(UserProfileRequestDTO.class));
+        }
 }

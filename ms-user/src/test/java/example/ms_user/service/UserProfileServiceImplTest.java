@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import example.ms_user.exception.ResourceNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -302,4 +304,105 @@ class UserProfileServiceImplTest {
         // correctamente el perfil.
         // Desarrollo debe revisar el método delete() de UserProfileServiceImpl.
     }
+        @Test
+        void getById_debeLanzarExcepcionCuandoPerfilNoExiste() {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        when(repository.findById(id))
+                .thenReturn(Optional.empty());
+
+        // ACT + ASSERT: ejecutar método y verificar excepción esperada.
+        ResourceNotFoundException exception =
+                assertThrows(
+                        ResourceNotFoundException.class,
+                        () -> service.getById(id)
+                );
+
+        assertEquals(
+                "Perfil no encontrado con ID: 999",
+                exception.getMessage()
+        );
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(repository).findById(id);
+
+        // Caso hipotético de falla para QA:
+        // Si se esperaba ResourceNotFoundException
+        // y el método retorna un UserProfileResponseDTO,
+        // QA debe reportar que el servicio no está validando
+        // correctamente la existencia del perfil antes de retornarlo.
+        // Desarrollo debe revisar el método getById()
+        // de UserProfileServiceImpl.
+        }
+                @Test
+        void update_debeLanzarExcepcionCuandoPerfilNoExiste() {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        UserProfileRequestDTO request =
+                new UserProfileRequestDTO(
+                        1L,
+                        "Andres",
+                        "Bustamante Actualizado",
+                        "987654321",
+                        "Nueva Direccion 456",
+                        LocalDate.of(2000, 5, 10),
+                        true
+                );
+
+        when(repository.findById(id))
+                .thenReturn(Optional.empty());
+
+        // ACT + ASSERT: ejecutar método y verificar excepción esperada.
+        ResourceNotFoundException exception =
+                assertThrows(
+                        ResourceNotFoundException.class,
+                        () -> service.update(id, request)
+                );
+
+        assertEquals(
+                "Perfil no encontrado con ID: 999",
+                exception.getMessage()
+        );
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(repository).findById(id);
+
+        // Caso hipotético de falla para QA:
+        // Si se esperaba ResourceNotFoundException
+        // y el método actualiza el registro igualmente,
+        // QA debe reportar que el servicio permite modificar
+        // perfiles inexistentes.
+        // Desarrollo debe revisar la validación del método update()
+        // en UserProfileServiceImpl.
+        }
+                @Test
+        void delete_debeLanzarExcepcionCuandoPerfilNoExiste() {
+
+        // ARRANGE
+        Long id = 999L;
+
+        when(repository.findById(id))
+                .thenReturn(Optional.empty());
+
+        // ACT
+        ResourceNotFoundException exception =
+                assertThrows(
+                        ResourceNotFoundException.class,
+                        () -> service.delete(id)
+                );
+
+        // ASSERT
+        assertEquals(
+                "Perfil no encontrado con ID: 999",
+                exception.getMessage()
+        );
+
+        // VERIFY
+        verify(repository).findById(id);
+        }
+    
 }

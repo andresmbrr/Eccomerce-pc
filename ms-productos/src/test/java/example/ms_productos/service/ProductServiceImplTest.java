@@ -1,30 +1,31 @@
 package example.ms_productos.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import example.ms_productos.client.CategoriaClient;
 import example.ms_productos.dto.CategoriaResponseDTO;
 import example.ms_productos.dto.ProductRequestDTO;
 import example.ms_productos.dto.ProductResponseDTO;
+import example.ms_productos.exception.ProductNotFoundException;
 import example.ms_productos.model.Product;
 import example.ms_productos.repository.ProductRepository;
 import example.ms_productos.service.impl.ProductServiceImpl;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
@@ -359,4 +360,102 @@ class ProductServiceImplTest {
         // correctamente el producto.
         // Desarrollo debe revisar deleteProduct() en ProductServiceImpl.
     }
+
+        @Test
+        void getProductById_debeLanzarExcepcionCuandoProductoNoExiste() {
+
+        // ARRANGE: simular que el producto no existe.
+        Long id = 999L;
+
+        when(repository.findById(id))
+                .thenReturn(Optional.empty());
+
+        // ACT + ASSERT: verificar que se lance la excepción esperada.
+        ProductNotFoundException exception =
+                assertThrows(
+                        ProductNotFoundException.class,
+                        () -> service.getProductById(id)
+                );
+
+        assertEquals(
+                "Producto no encontrado con ID: 999",
+                exception.getMessage()
+        );
+
+        // VERIFY: comprobar llamada al repositorio.
+        verify(repository).findById(id);
+
+        // Caso hipotético de falla para QA:
+        // Se esperaba ProductNotFoundException
+        // pero el servicio devolvió null o una excepción distinta.
+        // QA debe reportar que el sistema no maneja correctamente
+        // la búsqueda de productos inexistentes.
+        }
+                @Test
+        void updateProduct_debeLanzarExcepcionCuandoProductoNoExiste() {
+
+        // ARRANGE: simular que el producto no existe.
+        Long id = 999L;
+
+        ProductRequestDTO request =
+                new ProductRequestDTO(
+                        "Notebook",
+                        "Descripción",
+                        new BigDecimal("1000"),
+                        1L,
+                        true
+                );
+
+        when(repository.findById(id))
+                .thenReturn(Optional.empty());
+
+        // ACT + ASSERT: verificar excepción.
+        ProductNotFoundException exception =
+                assertThrows(
+                        ProductNotFoundException.class,
+                        () -> service.updateProduct(id, request)
+                );
+
+        assertEquals(
+                "Producto no encontrado con ID: 999",
+                exception.getMessage()
+        );
+
+        // VERIFY: comprobar llamada al repositorio.
+        verify(repository).findById(id);
+
+        // Caso hipotético de falla para QA:
+        // Se esperaba ProductNotFoundException
+        // pero el servicio permitió actualizar
+        // un producto inexistente.
+        }
+                @Test
+        void deleteProduct_debeLanzarExcepcionCuandoProductoNoExiste() {
+
+        // ARRANGE: simular que el producto no existe.
+        Long id = 999L;
+
+        when(repository.findById(id))
+                .thenReturn(Optional.empty());
+
+        // ACT + ASSERT: verificar excepción.
+        ProductNotFoundException exception =
+                assertThrows(
+                        ProductNotFoundException.class,
+                        () -> service.deleteProduct(id)
+                );
+
+        assertEquals(
+                "Producto no encontrado con ID: 999",
+                exception.getMessage()
+        );
+
+        // VERIFY: comprobar llamada al repositorio.
+        verify(repository).findById(id);
+
+        // Caso hipotético de falla para QA:
+        // Se esperaba ProductNotFoundException
+        // pero el sistema informó eliminación exitosa
+        // para un producto inexistente.
+        }
 }

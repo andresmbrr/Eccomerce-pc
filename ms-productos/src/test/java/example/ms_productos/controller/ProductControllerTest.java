@@ -1,34 +1,34 @@
 package example.ms_productos.controller;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.math.BigDecimal;
-import java.util.List;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import example.ms_productos.dto.ProductRequestDTO;
 import example.ms_productos.dto.ProductResponseDTO;
+import example.ms_productos.exception.GlobalExceptionHandler;
+import example.ms_productos.exception.ProductNotFoundException;
 import example.ms_productos.service.ProductService;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(MockitoExtension.class)
 class ProductControllerTest {
@@ -47,6 +47,7 @@ class ProductControllerTest {
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
 
         objectMapper = new ObjectMapper();
@@ -322,4 +323,125 @@ class ProductControllerTest {
         // Desarrollo debe revisar el método deleteProduct()
         // en ProductController.
     }
+        @Test
+        void getProductById_debeRetornar404CuandoProductoNoExiste() throws Exception {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        when(service.getProductById(id))
+                .thenThrow(
+                        new ProductNotFoundException(
+                                "Producto no encontrado con ID: " + id));
+
+        // ACT + ASSERT: ejecutar endpoint y verificar resultado esperado.
+        mockMvc.perform(get("/api/productos/{id}", id))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message")
+                        .value("Producto no encontrado con ID: 999"));
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(service).getProductById(id);
+
+        // Caso hipotético de falla para QA:
+        // Si se esperaba HTTP 404 Not Found
+        // y se obtiene HTTP 500 Internal Server Error,
+        // el manejo de excepciones del controller
+        // no está funcionando correctamente.
+        }
+                @Test
+        void updateProduct_debeRetornar404CuandoProductoNoExiste() throws Exception {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        ProductRequestDTO request =
+                new ProductRequestDTO(
+                        "Notebook Actualizado",
+                        "Descripción actualizada",
+                        new BigDecimal("999990"),
+                        1L,
+                        true
+                );
+
+        when(service.updateProduct(any(Long.class), any(ProductRequestDTO.class)))
+                .thenThrow(
+                        new ProductNotFoundException(
+                                "Producto no encontrado con ID: " + id));
+
+        // ACT + ASSERT: ejecutar endpoint y verificar resultado esperado.
+        mockMvc.perform(put("/api/productos/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message")
+                        .value("Producto no encontrado con ID: 999"));
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(service).updateProduct(any(Long.class), any(ProductRequestDTO.class));
+
+        // Caso hipotético de falla para QA:
+        // Si se esperaba HTTP 404 Not Found
+        // y se obtiene HTTP 200 OK,
+        // el endpoint está permitiendo actualizar
+        // un producto inexistente.
+        }
+                @Test
+        void deleteProduct_debeRetornar404CuandoProductoNoExiste() throws Exception {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        doThrow(
+                new ProductNotFoundException(
+                        "Producto no encontrado con ID: " + id))
+                .when(service)
+                .deleteProduct(id);
+
+        // ACT + ASSERT: ejecutar endpoint y verificar resultado esperado.
+        mockMvc.perform(delete("/api/productos/{id}", id))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message")
+                        .value("Producto no encontrado con ID: 999"));
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(service).deleteProduct(id);
+
+        // Caso hipotético de falla para QA:
+        // Si se esperaba HTTP 404 Not Found
+        // y se obtiene HTTP 204 No Content,
+        // el endpoint informa eliminación exitosa
+        // para un producto inexistente.
+        }
+                @Test
+        void createProduct_debeRetornar400CuandoNombreEsVacio() throws Exception {
+
+        // ARRANGE: request inválido.
+        ProductRequestDTO request =
+                new ProductRequestDTO(
+                        "",
+                        "Descripción válida",
+                        new BigDecimal("1000"),
+                        1L,
+                        true
+                );
+
+        // ACT + ASSERT
+        mockMvc.perform(post("/api/productos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.errors.name")
+                        .value("El nombre es obligatorio"));
+
+        // Caso hipotético de falla para QA:
+        // Si se esperaba HTTP 400 y se obtiene HTTP 201,
+        // el endpoint está permitiendo crear productos
+        // con nombre vacío.
+        }
+        
 }

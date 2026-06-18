@@ -2,8 +2,10 @@ package example.ms_pedidos.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -14,6 +16,7 @@ import java.util.Optional;
 
 import example.ms_pedidos.dto.OrderRequestDTO;
 import example.ms_pedidos.dto.OrderResponseDTO;
+import example.ms_pedidos.exception.ResourceNotFoundException;
 import example.ms_pedidos.model.Order;
 import example.ms_pedidos.model.OrderStatus;
 import example.ms_pedidos.repository.OrderRepository;
@@ -356,5 +359,104 @@ class OrderServiceImplTest {
         // VERIFY
         verify(repository).findById(id);
         verify(repository).save(pedido);
+    }
+        @Test
+    void getOrderById_debeLanzarExcepcionCuandoPedidoNoExiste() {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        when(repository.findById(id))
+                .thenReturn(Optional.empty());
+
+        // ACT + ASSERT: ejecutar método y verificar excepción.
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> service.getOrderById(id)
+        );
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(repository).findById(id);
+
+        // Caso hipotético de falla para QA:
+        // Si el método devuelve null en vez de lanzar
+        // ResourceNotFoundException, el manejo de errores
+        // es incorrecto y debe corregirse.
+    }
+        @Test
+    void updateOrder_debeLanzarExcepcionCuandoPedidoNoExiste() {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        OrderRequestDTO request =
+                new OrderRequestDTO(
+                        1L,
+                        new BigDecimal("1999990")
+                );
+
+        when(repository.findById(id))
+                .thenReturn(Optional.empty());
+
+        // ACT + ASSERT: ejecutar método y verificar excepción.
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> service.updateOrder(id, request)
+        );
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(repository).findById(id);
+        verify(repository, never()).save(any(Order.class));
+
+        // Caso hipotético de falla para QA:
+        // Si el método actualiza un pedido inexistente
+        // o intenta guardar datos, existe un problema
+        // en la validación de existencia del pedido.
+    }
+        @Test
+    void updateStatus_debeLanzarExcepcionCuandoPedidoNoExiste() {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        when(repository.findById(id))
+                .thenReturn(Optional.empty());
+
+        // ACT + ASSERT: ejecutar método y verificar excepción.
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> service.updateStatus(id, OrderStatus.PAID)
+        );
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(repository).findById(id);
+        verify(repository, never()).save(any(Order.class));
+
+        // Caso hipotético de falla para QA:
+        // Si el método actualiza el estado de un pedido inexistente,
+        // existe un problema en la validación previa de existencia.
+    }
+        @Test
+    void deleteOrder_debeLanzarExcepcionCuandoPedidoNoExiste() {
+
+        // ARRANGE: preparar datos y mocks.
+        Long id = 999L;
+
+        when(repository.findById(id))
+                .thenReturn(Optional.empty());
+
+        // ACT + ASSERT: ejecutar método y verificar excepción.
+        assertThrows(
+                ResourceNotFoundException.class,
+                () -> service.deleteOrder(id)
+        );
+
+        // VERIFY: comprobar llamadas al mock.
+        verify(repository).findById(id);
+        verify(repository, never()).save(any(Order.class));
+
+        // Caso hipotético de falla para QA:
+        // Si el método intenta guardar cambios sobre un pedido
+        // inexistente, existe un problema en la validación previa.
     }
 }
