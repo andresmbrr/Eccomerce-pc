@@ -146,52 +146,53 @@ class RoleServiceImplTest {
         * - datos retornados por repositorio
         */
     }
-    @Test
-void createRole_RolDuplicado_DeberiaLanzarIllegalArgumentException() {
+        @Test
+    void createRole_RolDuplicado_DeberiaLanzarIllegalArgumentException() {
 
-    // ARRANGE: preparar datos y mocks.
+        // ARRANGE: preparar datos y mocks.
 
-    RoleRequestDTO request =
-            new RoleRequestDTO("ADMIN");
+        RoleRequestDTO request =
+                new RoleRequestDTO("ADMIN");
 
-    Mockito.when(
-            repository.existsByName("ADMIN"))
-            .thenReturn(true);
+        Mockito.when(
+                repository.existsByName("ADMIN"))
+                .thenReturn(true);
 
-    // ACT + ASSERT: verificar excepción.
+        // ACT + ASSERT: verificar excepción.
 
-    IllegalArgumentException exception =
-            assertThrows(
-                    IllegalArgumentException.class,
-                    () -> service.createRole(request)
-            );
+        IllegalArgumentException exception =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> service.createRole(request)
+                );
 
-    assertEquals(
-            "Ya existe un rol con el nombre: ADMIN",
-            exception.getMessage());
+        assertEquals(
+                "Ya existe un rol con el nombre: ADMIN",
+                exception.getMessage());
 
-    // VERIFY: comprobar llamadas al mock.
+        // VERIFY: comprobar llamadas al mock.
 
-    Mockito.verify(repository)
-            .existsByName("ADMIN");
+        Mockito.verify(repository)
+                .existsByName("ADMIN");
 
-    Mockito.verify(repository, Mockito.never())
-            .save(any(Role.class));
+        Mockito.verify(repository, Mockito.never())
+                .save(any(Role.class));
 
-    /*
-     * Caso hipotético de falla para QA:
-     *
-     * Se esperaba:
-     * Mensaje indicando rol duplicado.
-     *
-     * Se obtuvo:
-     * El rol fue creado nuevamente.
-     *
-     * Revisar:
-     * - validación existsByName()
-     * - restricción de unicidad
-     * - lógica createRole()
-     */
-}
+        /*
+        * Caso hipotético de falla para QA:
+        *
+        * Se esperaba:
+        * Mensaje indicando rol duplicado.
+        *
+        * Se obtuvo:
+        * El rol fue creado nuevamente.
+        *
+        * Revisar:
+        * - validación existsByName()
+        * - restricción de unicidad
+        * - lógica createRole()
+        */
+    }
+
 
 }
