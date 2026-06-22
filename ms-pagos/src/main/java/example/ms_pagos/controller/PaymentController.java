@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import static org.mockito.ArgumentMatchers.eq;
 import example.ms_pagos.dto.PaymentRequestDTO;
 import example.ms_pagos.dto.PaymentResponseDTO;
 import example.ms_pagos.service.PaymentService;
