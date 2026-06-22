@@ -27,7 +27,7 @@ import example.ms_pagos.exception.ResourceNotFoundException;
 import example.ms_pagos.model.Payment;
 import example.ms_pagos.model.PaymentStatus;
 import example.ms_pagos.repository.PaymentRepository;
-import example.ms_pagos.service.impl.PaymentServiceImpl;
+import example.ms_pagos.service.Impl.PaymentServiceImpl;
 
 
 
