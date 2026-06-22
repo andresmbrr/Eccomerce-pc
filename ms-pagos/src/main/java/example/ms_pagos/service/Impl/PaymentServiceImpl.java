@@ -1,4 +1,4 @@
-package example.ms_pagos.service.Impl;
+package example.ms_pagos.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
