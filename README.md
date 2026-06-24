@@ -1,4 +1,19 @@
 # Ecommerce-PC
+# 🚀 SISTEMA DE MICROSERVICIOS MULTIMÓDULO - ENTREGA FINAL
+
+## 📦 COMPONENTES DE DISTRIBUCIÓN Y DEFENSA TÉCNICA
+
+Utilice los siguientes enlaces externos para descargar las versiones listas para producción y visualizar la defensa del proyecto:
+
+| Componente | Descripción | Enlace de Descarga (Nube externa) |
+
+| :--- | :--- | :--- |
+
+| **📦 Versión Sin Docker** <br>*(Arranque Nativo)* | Archivo `.zip` que contiene la carpeta `apps/` con los `.jar` compilados y el script `arrancar-nativo.bat` ordenado por fases. | [Descargar ZIP Nativo aquí](https://drive.google.com/drive/folders/1SxwfUTDvj1bqjNIYHsQqSrQk1GeoS1Di?usp=drive_link) |
+
+| **🐳 Versión Con Docker** <br>*(Avance Examen Transversal)* | Archivo `.zip` que contiene la carpeta `apps/` con los `.jar`, el archivo `docker-compose.yml` y el script automatizado `arrancar-sistema.bat`. | [Descargar ZIP Docker aquí](ENLACE_A_DRIVE_AQUÍ) |
+
+| **🎥 Video de Defensa Técnica** <br>*(Evaluación Individual)* | Enlace directo al video explicativo donde se evidencia el funcionamiento, testing y el aporte técnico individual. **Duración ideal: 15 minutos (Máximo permitido: 18 minutos).** | [Ver Video Explicativo aquí](ENLACE_A_VIDEO_AQUÍ) |
 
 Proyecto semestral DSY1103 desarrollado con arquitectura de microservicios usando Spring Boot, Spring Cloud, Eureka, API Gateway, OpenFeign, JPA/Hibernate, Spring Security, BCrypt y MySQL.
 
