@@ -6,9 +6,9 @@
 
 | Componente | Descripción | Enlace |
 |------------|------------|---------|
-| **📦 Versión Sin Docker** *(Arranque Nativo)* | Archivo `.zip` con los `.jar` compilados y scripts de ejecución. | https://drive.google.com/drive/folders/1SxwfUTDvj1bqjNIYHsQqSrQk1GeoS1Di |
-| **🎥 Video de Defensa Técnica** *(Evaluación Individual)* | Video explicativo del funcionamiento, pruebas unitarias, Swagger/OpenAPI y aporte técnico individual. | Próximamente |
-
+| **📦 Versión Sin Docker (Arranque Nativo)** | Archivo `.zip` que contiene la carpeta `apps/` con todos los `.jar` compilados y el script `arrancar-nativo.bat`. | https://drive.google.com/drive/folders/1SxwfUTDvj1bqjNIYHsQqSrQk1GeoS1Di |
+| **🐳 Versión Docker (Avance Examen Transversal)** | Versión preparada para contenerización mediante Docker Compose. No forma parte de la entrega oficial de esta evaluación. | N/A |
+| **🎥 Video de Defensa Técnica (Evaluación Individual)** | Video explicativo donde se presenta la arquitectura, ejecución, pruebas unitarias, documentación Swagger/OpenAPI y aporte técnico individual. | Próximamente |
 > La entrega oficial corresponde a la versión nativa (sin Docker).
 
 ---
@@ -178,6 +178,41 @@ mvn clean install -DskipTests
 ```
 
 ---
+# ▶ Ejecución Nativa del Sistema
+
+La entrega incluye el script:
+
+```bat
+arrancar-nativo.bat
+```
+
+Este script automatiza el inicio de todos los componentes del sistema respetando el orden requerido por la arquitectura distribuida.
+
+## Secuencia de Arranque
+
+1. MySQL
+2. Eureka Server
+3. Microservicios
+4. API Gateway
+
+### Orden de Inicio de Microservicios
+
+1. ms-auth
+2. ms-user
+3. ms-categorias
+4. ms-productos
+5. ms-stock
+6. ms-carrito
+7. ms-pedidos
+8. ms-pagos
+9. ms-notificaciones
+10. ms-reviews
+
+Una vez iniciados todos los servicios, el API Gateway queda disponible en:
+
+```text
+http://localhost:8080
+```
 
 # ▶ Orden de Ejecución
 
@@ -335,6 +370,36 @@ Cobertura:
 | ms-reviews | ✅ | ✅ |
 
 ---
+# 🧪 Ejecución de Pruebas Unitarias
+
+La suite completa de pruebas unitarias puede ejecutarse desde la raíz del proyecto mediante Maven.
+
+## Ejecutar todas las pruebas
+
+```bash
+mvn clean install
+```
+
+o utilizando Maven Wrapper:
+
+```bash
+./mvnw clean install
+```
+
+Durante el proceso de compilación se ejecutan automáticamente todas las pruebas unitarias desarrolladas con:
+
+- JUnit 5
+- Mockito
+- MockMvc
+
+Las pruebas cubren:
+
+- Controladores REST.
+- Servicios.
+- Validaciones.
+- Casos exitosos.
+- Casos de error.
+- Manejo de excepciones.
 
 # 📬 Postman
 
@@ -409,3 +474,35 @@ gateway=http://localhost:8080
 # 📌 Conclusión
 
 Ecommerce-PC demuestra la implementación de una arquitectura de microservicios moderna utilizando tecnologías del ecosistema Spring, incorporando seguridad, documentación, pruebas unitarias, comunicación distribuida y persistencia desacoplada.
+
+# 🎥 Video de Defensa Técnica
+
+La evaluación individual considera un video explicativo donde se demuestra el funcionamiento completo del sistema.
+
+## Contenido del Video
+
+- Arquitectura de microservicios.
+- Registro en Eureka Server.
+- API Gateway.
+- Comunicación mediante OpenFeign.
+- Documentación Swagger/OpenAPI.
+- Ejecución de pruebas unitarias.
+- Flujo funcional del Ecommerce.
+- Aporte técnico individual.
+
+## Requisitos
+
+- Duración ideal: 15 minutos.
+- Duración máxima permitida: 18 minutos.
+- Audio claro y comprensible.
+- Explicación técnica individual.
+
+## Archivos Complementarios
+
+La entrega incluye:
+
+```text
+subtitulos-video.txt
+```
+
+Este archivo contiene la transcripción y subtítulos utilizados durante la grabación de la defensa técnica.
