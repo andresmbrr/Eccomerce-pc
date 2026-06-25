@@ -1,91 +1,84 @@
 # Ecommerce-PC
+
 # 🚀 SISTEMA DE MICROSERVICIOS MULTIMÓDULO - ENTREGA FINAL
 
-## 📦 COMPONENTES DE DISTRIBUCIÓN Y DEFENSA TÉCNICA
+## 📦 Componentes de Distribución y Defensa Técnica
 
-Utilice los siguientes enlaces externos para descargar las versiones listas para producción y visualizar la defensa del proyecto:
+| Componente | Descripción | Enlace |
+|------------|------------|---------|
+| **📦 Versión Sin Docker** *(Arranque Nativo)* | Archivo `.zip` con los `.jar` compilados y scripts de ejecución. | https://drive.google.com/drive/folders/1SxwfUTDvj1bqjNIYHsQqSrQk1GeoS1Di |
+| **🎥 Video de Defensa Técnica** *(Evaluación Individual)* | Video explicativo del funcionamiento, pruebas unitarias, Swagger/OpenAPI y aporte técnico individual. | Próximamente |
 
-| Componente | Descripción | Enlace de Descarga (Nube externa) |
+> La entrega oficial corresponde a la versión nativa (sin Docker).
 
-| :--- | :--- | :--- |
+---
 
-| **📦 Versión Sin Docker** <br>*(Arranque Nativo)* | Archivo `.zip` que contiene la carpeta `apps/` con los `.jar` compilados y el script `arrancar-nativo.bat` ordenado por fases. | [Descargar ZIP Nativo aquí](https://drive.google.com/drive/folders/1SxwfUTDvj1bqjNIYHsQqSrQk1GeoS1Di?usp=drive_link) |
+# 📖 Descripción General
 
-| **🐳 Versión Con Docker** <br>*(Avance Examen Transversal)* | Archivo `.zip` que contiene la carpeta `apps/` con los `.jar`, el archivo `docker-compose.yml` y el script automatizado `arrancar-sistema.bat`. | [Descargar ZIP Docker aquí](ENLACE_A_DRIVE_AQUÍ) |
+Ecommerce-PC es una plataforma Ecommerce desarrollada con arquitectura de microservicios utilizando Spring Boot y Spring Cloud.
 
-| **🎥 Video de Defensa Técnica** <br>*(Evaluación Individual)* | Enlace directo al video explicativo donde se evidencia el funcionamiento, testing y el aporte técnico individual. **Duración ideal: 15 minutos (Máximo permitido: 18 minutos).** | [Ver Video Explicativo aquí](ENLACE_A_VIDEO_AQUÍ) |
+El sistema permite administrar autenticación, usuarios, categorías, productos, inventario, carrito de compras, pedidos, pagos, notificaciones y reseñas, utilizando una base de datos independiente por microservicio.
 
-Ecommerce-PC
-🚀 Sistema Ecommerce basado en Arquitectura de Microservicios
+---
 
-Proyecto semestral desarrollado para la asignatura DSY1103, implementando una arquitectura distribuida basada en microservicios utilizando Spring Boot y Spring Cloud.
+# 👥 Integrantes
 
-El sistema permite gestionar usuarios, autenticación, productos, categorías, inventario, carrito de compras, pedidos, pagos, notificaciones y reseñas, siguiendo principios de desacoplamiento, escalabilidad y responsabilidad única.
+- Andrés Bustamante
+- Matías Latrach
 
-👥 Integrantes
-Andrés Bustamante
-Matías Latrach
-🎯 Objetivo del Proyecto
+---
 
-Desarrollar una plataforma Ecommerce utilizando arquitectura de microservicios que permita:
+# 🎯 Objetivo
 
-Registro y autenticación de usuarios.
-Administración de perfiles.
-Gestión de categorías y productos.
-Control de inventario.
-Administración de carrito de compras.
-Gestión de pedidos.
-Registro de pagos.
-Generación de notificaciones.
-Gestión de reseñas de productos.
-🏗 Arquitectura General
-Cliente / Postman / Navegador
-            |
-            v
-      API Gateway
-        :8080
-            |
-            v
-      Eureka Server
-        :8761
-            |
-            +------------------+
-            |                  |
-            v                  v
+Implementar una solución distribuida basada en microservicios aplicando:
 
-ms-auth              :8081
-ms-user              :8082
-ms-productos         :8083
-ms-stock             :8084
-ms-carrito           :8085
-ms-pedidos           :8086
-ms-pagos             :8087
-ms-notificaciones    :8088
-ms-reviews           :8089
-ms-categorias        :8090
-📦 Proyecto Maven Multimódulo
+- Spring Boot 3
+- Spring Cloud
+- Eureka Server
+- API Gateway
+- OpenFeign
+- Spring Security
+- Swagger/OpenAPI
+- Testing con JUnit y Mockito
+- Persistencia MySQL
 
-El sistema fue desarrollado utilizando una estructura Maven Padre-Hijos.
+---
 
-El módulo raíz centraliza:
+# 🏗 Arquitectura General
 
-Dependencias compartidas.
-Plugins Maven.
-Configuración de compilación.
-Gestión de versiones.
-Construcción completa del sistema.
+```text
+Cliente / Postman
+        |
+        v
+   API Gateway :8080
+        |
+        v
+  Eureka Server :8761
+        |
+        +--> ms-auth           :8081
+        +--> ms-user           :8082
+        +--> ms-productos      :8083
+        +--> ms-stock          :8084
+        +--> ms-carrito        :8085
+        +--> ms-pedidos        :8086
+        +--> ms-pagos          :8087
+        +--> ms-notificaciones :8088
+        +--> ms-reviews        :8089
+        +--> ms-categorias     :8090
+```
 
-Cada microservicio posee su propio pom.xml heredando del proyecto padre.
+---
 
-📁 Estructura del Proyecto
+# 📦 Proyecto Maven Multimódulo
+
+El sistema utiliza una estructura Maven Padre-Hijos.
+
+```text
 Ecommerce-PC-parent/
 │
 ├── pom.xml
-├── README.md
-│
 ├── eureka-server/
 ├── api-gateway/
-│
 ├── ms-auth/
 ├── ms-user/
 ├── ms-categorias/
@@ -96,123 +89,131 @@ Ecommerce-PC-parent/
 ├── ms-pagos/
 ├── ms-notificaciones/
 └── ms-reviews/
-│
-├── sql/
-│   ├── 01-ms-auth.sql
-│   ├── 02-ms-user.sql
-│   ├── 03-ms-categorias.sql
-│   ├── 04-ms-productos.sql
-│   ├── 05-ms-stock.sql
-│   ├── 06-ms-carrito.sql
-│   ├── 07-ms-pedidos.sql
-│   ├── 08-ms-pagos.sql
-│   ├── 09-ms-notificaciones.sql
-│   └── 10-ms-reviews.sql
-│
-└── postman/
-    └── Ecommerce-PC-EV2-Actualizado.postman_collection.json
-🛠 Tecnologías Utilizadas
-Java 21
-Spring Boot 3
-Spring Cloud
-Spring Security
-BCrypt
-Spring Data JPA
-Hibernate ORM
-MySQL
-OpenFeign
-Eureka Server
-API Gateway
-Bean Validation
-Lombok
-Swagger / OpenAPI
-JUnit 5
-Mockito
-MockMvc
-Maven
-Postman
-🔧 Microservicios
-Servicio	Puerto	Responsabilidad
-Eureka Server	8761	Registro y descubrimiento
-API Gateway	8080	Punto único de entrada
-ms-auth	8081	Autenticación y roles
-ms-user	8082	Perfiles de usuario
-ms-productos	8083	Productos
-ms-stock	8084	Inventario
-ms-carrito	8085	Carrito de compras
-ms-pedidos	8086	Gestión de pedidos
-ms-pagos	8087	Gestión de pagos
-ms-notificaciones	8088	Notificaciones
-ms-reviews	8089	Reseñas
-ms-categorias	8090	Categorías
-🗄 Bases de Datos
+```
 
-Cada microservicio posee una base de datos independiente.
+---
 
-Microservicio	Base de Datos
-ms-auth	ms_auth_db
-ms-user	ms_user_db
-ms-categorias	ms_categorias_db
-ms-productos	ms_productos_db
-ms-stock	ms_stock_db
-ms-carrito	ms_carrito_db
-ms-pedidos	ms_pedidos_db
-ms-pagos	ms_pagos_db
-ms-notificaciones	ms_notificaciones_db
-ms-reviews	ms_reviews_db
+# 🛠 Tecnologías Utilizadas
 
-Hibernate genera automáticamente las tablas mediante:
+- Java 21
+- Spring Boot 3
+- Spring Cloud
+- Spring Security
+- BCrypt
+- Spring Data JPA
+- Hibernate ORM
+- MySQL
+- OpenFeign
+- Eureka Server
+- API Gateway
+- Lombok
+- Bean Validation
+- Swagger / OpenAPI
+- Maven
+- JUnit 5
+- Mockito
+- MockMvc
+- Postman
 
+---
+
+# 🔧 Microservicios
+
+| Servicio | Puerto | Responsabilidad |
+|-----------|---------:|----------------|
+| eureka-server | 8761 | Descubrimiento de servicios |
+| api-gateway | 8080 | Punto único de entrada |
+| ms-auth | 8081 | Usuarios, roles y autenticación |
+| ms-user | 8082 | Perfiles |
+| ms-productos | 8083 | Productos |
+| ms-stock | 8084 | Inventario |
+| ms-carrito | 8085 | Carrito |
+| ms-pedidos | 8086 | Pedidos |
+| ms-pagos | 8087 | Pagos |
+| ms-notificaciones | 8088 | Notificaciones |
+| ms-reviews | 8089 | Reseñas |
+| ms-categorias | 8090 | Categorías |
+
+---
+
+# 🗄 Bases de Datos
+
+| Microservicio | Base de Datos |
+|---------------|---------------|
+| ms_auth_db | Autenticación |
+| ms_user_db | Usuarios |
+| ms_categorias_db | Categorías |
+| ms_productos_db | Productos |
+| ms_stock_db | Stock |
+| ms_carrito_db | Carrito |
+| ms_pedidos_db | Pedidos |
+| ms_pagos_db | Pagos |
+| ms_notificaciones_db | Notificaciones |
+| ms_reviews_db | Reviews |
+
+Configuración ORM:
+
+```properties
 spring.jpa.hibernate.ddl-auto=update
-🚀 Compilación del Proyecto
+```
 
-Desde la raíz del proyecto:
+---
 
+# 🚀 Compilación
+
+```bash
 ./mvnw clean install
+```
 
-Compilar omitiendo pruebas:
-
+```bash
 ./mvnw clean install -DskipTests
+```
 
-Utilizando Maven instalado globalmente:
-
+```bash
 mvn clean install
+```
+
+```bash
 mvn clean install -DskipTests
-▶ Orden de Ejecución
-MySQL
-Eureka Server
-API Gateway
-ms-auth
-ms-user
-ms-categorias
-ms-productos
-ms-stock
-ms-carrito
-ms-pedidos
-ms-pagos
-ms-notificaciones
-ms-reviews
-🌐 Eureka Server
+```
+
+---
+
+# ▶ Orden de Ejecución
+
+1. MySQL
+2. Eureka Server
+3. API Gateway
+4. ms-auth
+5. ms-user
+6. ms-categorias
+7. ms-productos
+8. ms-stock
+9. ms-carrito
+10. ms-pedidos
+11. ms-pagos
+12. ms-notificaciones
+13. ms-reviews
+
+---
+
+# 🌐 Eureka
+
+```text
 http://localhost:8761
+```
 
-Servicios registrados:
+---
 
-API-GATEWAY
-MS-AUTH
-MS-USER
-MS-CATEGORIAS
-MS-PRODUCTOS
-MS-STOCK
-MS-CARRITO
-MS-PEDIDOS
-MS-PAGOS
-MS-NOTIFICACIONES
-MS-REVIEWS
-🚪 API Gateway
+# 🚪 API Gateway
+
+```text
 http://localhost:8080
+```
 
-Rutas principales:
+Rutas:
 
+```text
 /api/auth/**
 /api/users/**
 /api/categorias/**
@@ -223,134 +224,137 @@ Rutas principales:
 /api/pagos/**
 /api/notificaciones/**
 /api/reviews/**
-📖 Swagger / OpenAPI
+```
 
-Cada microservicio expone documentación automática mediante SpringDoc OpenAPI.
+---
 
-Servicio	URL Swagger
-ms-auth	http://localhost:8081/doc/swagger-ui.html
-ms-user	http://localhost:8082/doc/swagger-ui.html
-ms-productos	http://localhost:8083/doc/swagger-ui.html
-ms-stock	http://localhost:8084/doc/swagger-ui.html
-ms-carrito	http://localhost:8085/doc/swagger-ui.html
-ms-pedidos	http://localhost:8086/doc/swagger-ui.html
-ms-pagos	http://localhost:8087/doc/swagger-ui.html
-ms-notificaciones	http://localhost:8088/doc/swagger-ui.html
-ms-reviews	http://localhost:8089/doc/swagger-ui.html
-ms-categorias	http://localhost:8090/doc/swagger-ui.html
-🔗 Comunicación entre Microservicios (Feign)
-Servicio Origen	Servicio Destino
-ms-carrito	ms-productos
-ms-carrito	ms-stock
-ms-pagos	ms-pedidos
-🔐 Seguridad
+# 📖 Swagger / OpenAPI
 
-El sistema implementa:
+| Servicio | URL |
+|-----------|-----|
+| ms-auth | http://localhost:8081/doc/swagger-ui.html |
+| ms-user | http://localhost:8082/doc/swagger-ui.html |
+| ms-productos | http://localhost:8083/doc/swagger-ui.html |
+| ms-stock | http://localhost:8084/doc/swagger-ui.html |
+| ms-carrito | http://localhost:8085/doc/swagger-ui.html |
+| ms-pedidos | http://localhost:8086/doc/swagger-ui.html |
+| ms-pagos | http://localhost:8087/doc/swagger-ui.html |
+| ms-notificaciones | http://localhost:8088/doc/swagger-ui.html |
+| ms-reviews | http://localhost:8089/doc/swagger-ui.html |
+| ms-categorias | http://localhost:8090/doc/swagger-ui.html |
 
-Spring Security
-BCrypt Password Encoder
-Gestión de Roles
-Registro de Usuarios
-Login Seguro
-Protección de Contraseñas Encriptadas
-✅ Validaciones
+---
 
-Se implementan validaciones utilizando Bean Validation:
+# 🔗 Comunicación entre Microservicios
 
+OpenFeign:
+
+- ms-carrito → ms-productos
+- ms-carrito → ms-stock
+- ms-pagos → ms-pedidos
+
+---
+
+# 🔐 Seguridad
+
+Implementación mediante:
+
+- Spring Security
+- BCrypt Password Encoder
+- Roles de usuario
+- Login seguro
+- Protección de contraseñas
+
+---
+
+# ✅ Validaciones
+
+Uso de Bean Validation:
+
+```java
 @NotNull
 @NotBlank
-@Positive
-@PositiveOrZero
+@Email
+@Size
 @Min
 @Max
-@Size
-@Email
-@Past
-⚠ Manejo Global de Errores
+@Positive
+@PositiveOrZero
+```
 
-Todos los microservicios incorporan:
+---
 
+# ⚠ Manejo de Excepciones
+
+Todos los microservicios implementan:
+
+```java
 @RestControllerAdvice
+```
 
-Manejando respuestas:
+Controlando errores HTTP:
 
-400 Bad Request
-404 Not Found
-409 Conflict
-500 Internal Server Error
-📝 Logs
+- 400
+- 404
+- 409
+- 500
 
-Se implementan logs mediante:
+---
 
+# 📝 Logging
+
+Implementado mediante:
+
+```java
 @Slf4j
+```
 
-Registrando:
+---
 
-Creación de recursos
-Actualizaciones
-Eliminaciones
-Consultas
-Errores
-Comunicación Feign
+# 🧪 Pruebas Unitarias
 
-Ejemplo:
+Tecnologías utilizadas:
 
-log.info("Pedido creado ID {}", saved.getId());
-🧪 Pruebas Unitarias
+- JUnit 5
+- Mockito
+- MockMvc
 
-Se implementaron pruebas unitarias utilizando:
+Cobertura:
 
-JUnit 5
-Mockito
-MockMvc
+| Microservicio | Controller | Service |
+|---------------|-----------|----------|
+| ms-auth | ✅ | ✅ |
+| ms-user | ✅ | ✅ |
+| ms-categorias | ✅ | ✅ |
+| ms-productos | ✅ | ✅ |
+| ms-stock | ✅ | ✅ |
+| ms-carrito | ✅ | ✅ |
+| ms-pedidos | ✅ | ✅ |
+| ms-pagos | ✅ | ✅ |
+| ms-notificaciones | ✅ | ✅ |
+| ms-reviews | ✅ | ✅ |
 
-Cobertura aplicada sobre:
+---
 
-Controllers
-Services
-Validaciones
-Casos exitosos
-Casos de error
-📊 Cobertura de Testing
-Microservicio	Controller Test	Service Test
-ms-auth	✅	✅
-ms-user	✅	✅
-ms-categorias	✅	✅
-ms-productos	✅	✅
-ms-stock	✅	✅
-ms-carrito	✅	✅
-ms-pedidos	✅	✅
-ms-pagos	✅	✅
-ms-notificaciones	✅	✅
-ms-reviews	✅	✅
-🧪 Ejecución de Pruebas Unitarias
+# 📬 Postman
 
-Ejemplo:
+Colección:
 
-./mvnw -pl ms-productos -Dtest=ProductControllerTest test
-
-./mvnw -pl ms-productos -Dtest=ProductServiceImplTest test
-
-Para ejecutar todas las pruebas:
-
-mvn test
-📬 Postman
-
-Colección incluida:
-
+```text
 postman/Ecommerce-PC-EV2-Actualizado.postman_collection.json
+```
 
-Variable utilizada:
+Variable:
 
+```text
 gateway=http://localhost:8080
-🗃 Scripts SQL
+```
 
-Ubicación:
+---
 
-/sql
+# 🗃 Scripts SQL
 
-Scripts incluidos:
-
+```text
 01-ms-auth.sql
 02-ms-user.sql
 03-ms-categorias.sql
@@ -361,41 +365,47 @@ Scripts incluidos:
 08-ms-pagos.sql
 09-ms-notificaciones.sql
 10-ms-reviews.sql
-🛒 Flujo Funcional del Ecommerce
-Usuario se registra en ms-auth.
-Usuario crea perfil en ms-user.
-Usuario consulta productos.
-Usuario agrega productos al carrito.
-ms-carrito valida stock mediante Feign.
-Usuario genera pedido.
-Usuario realiza pago.
-Se genera notificación.
-Usuario registra una reseña.
-📈 Estado Actual del Proyecto
-Componente	Estado
-Maven Multimódulo	✅
-Eureka Server	✅
-API Gateway	✅
-Spring Security	✅
-BCrypt	✅
-Swagger/OpenAPI	✅
-OpenFeign	✅
-MySQL	✅
-JPA/Hibernate	✅
-Bean Validation	✅
-Logging	✅
-Manejo de Excepciones	✅
-Postman	✅
-Scripts SQL	✅
-Testing Controller	✅
-Testing Service	✅
-Docker	🚧 En desarrollo
-📌 Conclusión
+```
 
-Ecommerce-PC implementa una arquitectura moderna basada en microservicios utilizando el ecosistema Spring, aplicando buenas prácticas de desacoplamiento, documentación, seguridad, pruebas unitarias y comunicación distribuida entre servicios.
+---
 
-El proyecto demuestra la integración de tecnologías empresariales ampliamente utilizadas en entornos reales de desarrollo backend.
-ms-pagos
-ms-notificaciones
-ms-reviews
-ms-categorias
+# 🛒 Flujo Funcional
+
+1. Registro de usuario.
+2. Creación de perfil.
+3. Creación de categorías.
+4. Registro de productos.
+5. Gestión de stock.
+6. Agregar al carrito.
+7. Generar pedido.
+8. Registrar pago.
+9. Generar notificación.
+10. Registrar reseña.
+
+---
+
+# 📈 Estado Actual
+
+| Componente | Estado |
+|------------|---------|
+| Maven Multimódulo | ✅ |
+| Eureka Server | ✅ |
+| API Gateway | ✅ |
+| OpenFeign | ✅ |
+| Swagger/OpenAPI | ✅ |
+| Spring Security | ✅ |
+| BCrypt | ✅ |
+| MySQL | ✅ |
+| JPA/Hibernate | ✅ |
+| Bean Validation | ✅ |
+| Logging | ✅ |
+| Testing Controller | ✅ |
+| Testing Service | ✅ |
+| Postman | ✅ |
+| Scripts SQL | ✅ |
+
+---
+
+# 📌 Conclusión
+
+Ecommerce-PC demuestra la implementación de una arquitectura de microservicios moderna utilizando tecnologías del ecosistema Spring, incorporando seguridad, documentación, pruebas unitarias, comunicación distribuida y persistencia desacoplada.
