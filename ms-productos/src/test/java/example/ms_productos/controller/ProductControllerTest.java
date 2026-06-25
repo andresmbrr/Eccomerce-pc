@@ -424,7 +424,7 @@ class ProductControllerTest {
                                 .andExpect(status().isBadRequest())
                                 .andExpect(jsonPath("$.status").value(400))
                                 .andExpect(jsonPath("$.errors.name")
-                                                .value("El nombre debe tener entre 3 y 120 caracteres"));
+                                .value("El nombre es obligatorio"));
 
                 // Caso hipotético de falla para QA:
                 // Si se esperaba HTTP 400 y se obtiene HTTP 201,
