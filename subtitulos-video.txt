@@ -1,0 +1,233 @@
+Presentación de Andrés Bustamante
+
+Hola profesor.
+
+Mi nombre es Andrés Bustamante y voy a presentar mi participación dentro del proyecto E-commerce PC.
+
+Este proyecto consiste en una plataforma de e-commerce desarrollada mediante una arquitectura de microservicios utilizando Spring Boot, Spring Cloud, Eureka Server, API Gateway y comunicación entre microservicios mediante OpenFeign.
+
+Mis principales aportes estuvieron enfocados en dos áreas durante esta evaluación:
+
+La configuración y administración del proyecto Maven Multimódulo.
+El desarrollo de pruebas unitarias para distintos microservicios del sistema.
+
+A continuación voy a mostrar brevemente la estructura del proyecto y posteriormente las pruebas implementadas.
+
+Maven Multimódulo
+
+Una de las decisiones técnicas del proyecto fue utilizar Maven Multimódulo.
+
+Esto nos permitió centralizar la configuración general dentro de un proyecto padre y mantener cada microservicio separado en módulos independientes.
+
+Gracias a esta estructura podemos:
+
+Administrar dependencias de forma más ordenada.
+Reutilizar configuraciones comunes.
+Compilar todo el ecosistema desde un único punto.
+
+Además, cada módulo mantiene una responsabilidad específica, lo que facilita el mantenimiento y la escalabilidad del sistema.
+
+Aquí podemos observar el archivo POM principal.
+
+Este archivo actúa como padre del proyecto y contiene la declaración de todos los módulos que forman parte del ecosistema.
+
+Cuando Maven ejecuta una compilación desde este nivel, recorre automáticamente todos los microservicios respetando sus dependencias y configuraciones.
+
+Esto simplifica considerablemente la gestión del proyecto.
+
+Compilación del proyecto
+
+Otro de mis aportes fue trabajar con la compilación y validación completa del sistema desde la raíz del proyecto.
+
+Podemos ejecutar el comando:
+
+mvn clean install
+
+Este proceso realiza varias tareas importantes:
+
+Compila todos los módulos.
+Resuelve las dependencias.
+Ejecuta las pruebas unitarias.
+Genera los archivos JAR necesarios para la ejecución.
+
+Todo esto ocurre automáticamente gracias a la estructura multimódulo.
+
+Como podemos observar, la compilación finaliza correctamente.
+
+Esto demuestra que todos los microservicios compilan sin errores y que las pruebas configuradas se ejecutan exitosamente.
+
+También confirma que los archivos JAR necesarios para el despliegue del sistema fueron generados correctamente.
+
+Si revisamos la carpeta target, podemos comprobar que los ejecutables fueron creados correctamente luego de ejecutar el comando.
+
+Pruebas unitarias
+
+La segunda parte de mi aporte estuvo relacionada con las pruebas unitarias.
+
+Para validar el comportamiento de los distintos componentes utilizamos:
+
+JUnit 5
+Mockito
+MockMvc
+
+Estas herramientas nos permiten probar funcionalidades específicas de manera aislada y garantizar que cada componente responda correctamente.
+
+Aquí podemos observar un ejemplo de prueba para un controlador REST.
+
+Estas pruebas verifican que los endpoints respondan correctamente frente a distintos escenarios, validando tanto respuestas exitosas como situaciones de error.
+
+Cada método de prueba representa un escenario específico, por ejemplo:
+
+Creación de productos.
+Consulta de información.
+Eliminación lógica.
+Manejo de errores.
+Validaciones de datos.
+
+Aquí podemos observar algunos ejemplos de pruebas implementadas para el microservicio de productos.
+
+Cada método de prueba representa un escenario específico que el sistema debe cumplir correctamente.
+
+Por ejemplo:
+
+Create Product
+
+La prueba Create Product debe retornar un HTTP 201 Created.
+
+Valida que, cuando se envía una solicitud válida para crear un producto, el sistema responda indicando que el recurso fue creado exitosamente.
+
+Get Product
+
+La prueba Get Product debe retornar un HTTP 200 OK junto con la lista de productos.
+
+Verifica que un producto existente pueda ser consultado correctamente.
+
+Delete Product
+
+Finalmente, tenemos la prueba Delete Product.
+
+Comprueba que la eliminación lógica de un producto se realice correctamente y que el sistema responda con un HTTP 204 No Content, que es el código esperado cuando una operación se ejecuta correctamente sin devolver contenido.
+
+Además de estos casos, también desarrollamos pruebas para:
+
+Validaciones.
+Manejo de excepciones.
+Escenarios de error.
+
+El objetivo es asegurar la calidad y estabilidad del sistema antes de su despliegue.
+
+Documentación
+
+Toda esta información también se encuentra documentada dentro del README del proyecto.
+
+Allí se especifican:
+
+Las tecnologías utilizadas.
+El proceso de compilación.
+La ejecución de las pruebas unitarias.
+
+Esto facilita que cualquier integrante del equipo o evaluador pueda comprender rápidamente cómo está estructurado el proyecto.
+
+Como se puede observar, el proyecto cuenta con:
+
+Maven Multimódulo operativo.
+Pruebas unitarias implementadas.
+Comunicación entre microservicios.
+Persistencia independiente.
+Documentación mediante Swagger.
+API Gateway.
+Eureka Server funcionando.
+
+Con esto concluye mi participación en la presentación.
+
+Mi aporte principal estuvo enfocado en la configuración de Maven Multimódulo y en el desarrollo de pruebas unitarias para asegurar la calidad y estabilidad del sistema.
+
+A continuación, mi compañero mostrará la puesta en marcha del sistema mediante el script arrancarNativo.bat, el registro de los microservicios en Eureka Server, el funcionamiento del API Gateway y la documentación de endpoints implementada mediante Swagger OpenAPI.
+
+Muchas gracias.
+
+Presentación de Matías Latrach
+
+Buen día, profesor.
+
+Mi nombre es Matías Latrach y, continuando con la explicación de mi compañero, mi aporte al proyecto se basó principalmente en dos áreas:
+
+La implementación de Swagger OpenAPI.
+El desarrollo del script .bat que permite iniciar el proyecto de forma nativa.
+
+Este es el script que desarrollamos.
+
+En él se inicia primero el Eureka Server, luego los distintos microservicios y finalmente el API Gateway.
+
+Antes de eso quiero mostrar que el proyecto compila correctamente, por lo que vamos a ejecutar el siguiente comando y adelantaré el video hasta que finalice la compilación.
+
+Como podemos ver, el proyecto compila correctamente y no presenta ningún error.
+
+Ahora procederemos a ejecutar el archivo .bat.
+
+Ya tenemos los servicios iniciados correctamente, así que vamos a revisar Eureka Server para verificar que todos los microservicios se hayan registrado.
+
+Verificación en Eureka
+
+Una vez levantados los servicios, podemos observar los diez microservicios registrados junto con el API Gateway.
+
+Ahora continuaremos con la revisión de la documentación generada mediante Swagger OpenAPI.
+
+Realizaremos un ejemplo utilizando un método GET y un método POST.
+
+Método GET
+
+Ingresamos al microservicio de Categorías.
+
+Actualizamos la documentación y realizamos un GET para listar las categorías.
+
+Ejecutamos la solicitud y obtenemos correctamente las categorías registradas, como por ejemplo:
+
+Consolas y videojuegos.
+Tarjetas gráficas.
+
+Ahora nos dirigimos al microservicio de Productos.
+
+Ejecutamos un GET y obtenemos la lista de productos registrados.
+
+En este caso aparecen una PlayStation 5 y una RTX 4060.
+
+Método POST
+
+Ahora realizaremos un ejemplo utilizando el método POST.
+
+Primero crearemos una nueva categoría.
+
+En este caso agregaremos la categoría:
+
+Televisores
+
+Descripción:
+
+Televisores 4K
+
+Ejecutamos la solicitud y observamos que se crea correctamente.
+
+Ahora crearemos un nuevo producto.
+
+Ingresaremos un:
+
+LG de 42 pulgadas 4K
+
+Asignaremos un precio de $499.990 y lo relacionaremos con la categoría número 3.
+
+Ejecutamos la solicitud y obtenemos un HTTP 201 Created, indicando que la creación fue exitosa.
+
+Finalmente realizamos nuevamente un GET y comprobamos que el producto fue registrado correctamente.
+
+Cierre
+
+Para finalizar, a modo de resumen:
+
+Mi compañero estuvo encargado de la configuración de Maven Multimódulo y del desarrollo de las pruebas unitarias.
+
+En mi caso, estuve encargado de la puesta en marcha nativa del proyecto mediante el script .bat y de la documentación completa mediante Swagger OpenAPI.
+
+Además, en el README del proyecto se encuentra toda la documentación necesaria para utilizar Swagger y ejecutar correctamente el sistema.
+
+Profesor, muchas gracias por su tiempo.
