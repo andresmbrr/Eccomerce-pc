@@ -31,9 +31,8 @@ public class GlobalExceptionHandler {
 
         Map<String, String> errores = new HashMap<>();
 
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                errores.put(error.getField(), error.getDefaultMessage())
-        );
+        ex.getBindingResult().getFieldErrors()
+                .forEach(error -> errores.putIfAbsent(error.getField(), error.getDefaultMessage()));
 
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
