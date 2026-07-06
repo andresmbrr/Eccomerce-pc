@@ -9,7 +9,12 @@
 | **📦 Versión Sin Docker (Arranque Nativo)** | Archivo `.zip` que contiene la carpeta `apps/` con todos los `.jar` compilados y el script `arrancar-nativo.bat`. | https://drive.google.com/file/d/1EI0Pgy0EUGKgA58SQdD4-uIVUoeN0hK0/view?usp=sharing |
 | **🐳 Versión Docker** | Versión preparada para contenerización mediante Docker Compose. | https://drive.google.com/file/d/1g0QYrXrvzaZD98sjwdWlew4cxP6tD3ie/view?usp=sharing |
 | **🎥 Video de Defensa Técnica (Evaluación Individual)** | Video explicativo donde se presenta la arquitectura, ejecución, pruebas unitarias, documentación Swagger/OpenAPI y aporte técnico individual. | https://youtu.be/yA9T4tUUDLc |
-> La entrega oficial corresponde a la versión nativa (sin Docker) e incluye la entrega Con Docker.
+> La entrega incluye dos modalidades de ejecución:
+>
+> - 📦 Ejecución nativa mediante archivos JAR y el script `arrancar-nativo.bat`.
+> - 🐳 Ejecución mediante Docker y Docker Compose.
+>
+> Ambas versiones implementan la misma arquitectura, funcionalidades y microservicios del sistema.
 
 ---
 
@@ -41,6 +46,8 @@ Implementar una solución distribuida basada en microservicios aplicando:
 - Swagger/OpenAPI
 - Testing con JUnit y Mockito
 - Persistencia MySQL
+- Docker
+- Docker Compose
 
 ---
 
@@ -187,6 +194,33 @@ arrancar-nativo.bat
 ```
 
 Este script automatiza el inicio de todos los componentes del sistema respetando el orden requerido por la arquitectura distribuida.
+
+# 🐳 Ejecución mediante Docker
+
+Además de la ejecución nativa, el proyecto incorpora una versión completamente contenerizada utilizando Docker y Docker Compose.
+
+Esta modalidad permite levantar toda la arquitectura de microservicios de forma automatizada, facilitando el despliegue, la portabilidad y la configuración del entorno.
+
+## Componentes desplegados
+
+- MySQL
+- Eureka Server
+- API Gateway
+- ms-auth
+- ms-user
+- ms-categorias
+- ms-productos
+- ms-stock
+- ms-carrito
+- ms-pedidos
+- ms-pagos
+- ms-notificaciones
+- ms-reviews
+
+## Levantar el sistema
+
+```bash
+docker compose up --build
 
 ## Secuencia de Arranque
 
@@ -454,6 +488,8 @@ gateway=http://localhost:8080
 | Componente | Estado |
 |------------|---------|
 | Maven Multimódulo | ✅ |
+| Docker | ✅ |
+| Docker Compose | ✅ |
 | Eureka Server | ✅ |
 | API Gateway | ✅ |
 | OpenFeign | ✅ |
@@ -471,9 +507,16 @@ gateway=http://localhost:8080
 
 ---
 
+
 # 📌 Conclusión
 
-Ecommerce-PC demuestra la implementación de una arquitectura de microservicios moderna utilizando tecnologías del ecosistema Spring, incorporando seguridad, documentación, pruebas unitarias, comunicación distribuida y persistencia desacoplada.
+Ecommerce-PC demuestra la implementación de una arquitectura moderna basada en microservicios utilizando el ecosistema Spring.
+
+El sistema integra componentes fundamentales como Eureka Server, API Gateway, OpenFeign, Spring Security, Swagger/OpenAPI, Bean Validation, Logging, JUnit, Mockito y persistencia desacoplada mediante una base de datos independiente por microservicio.
+
+Además, incorpora una versión contenerizada mediante Docker y Docker Compose, permitiendo ejecutar toda la plataforma de forma automatizada, portable y consistente en distintos entornos.
+
+Actualmente el proyecto puede desplegarse tanto de forma nativa como mediante contenedores Docker, manteniendo la misma arquitectura, funcionalidades y flujo de negocio en ambas modalidades.
 
 # 🎥 Video de Defensa Técnica
 
