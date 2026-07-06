@@ -9,7 +9,7 @@
 | **📦 Versión Sin Docker (Arranque Nativo)** | Archivo `.zip` que contiene la carpeta `apps/` con todos los `.jar` compilados y el script `arrancar-nativo.bat`. | https://drive.google.com/file/d/1EI0Pgy0EUGKgA58SQdD4-uIVUoeN0hK0/view?usp=sharing |
 | **🐳 Versión Docker** | Versión preparada para contenerización mediante Docker Compose. | https://drive.google.com/file/d/1g0QYrXrvzaZD98sjwdWlew4cxP6tD3ie/view?usp=sharing |
 | **🎥 Video de Defensa Técnica (Evaluación Individual)** | Video explicativo donde se presenta la arquitectura, ejecución, pruebas unitarias, documentación Swagger/OpenAPI y aporte técnico individual. | https://youtu.be/yA9T4tUUDLc |
-> La entrega oficial corresponde a la versión nativa (sin Docker).
+> La entrega oficial corresponde a la versión nativa (sin Docker) e incluye la entrega Con Docker.
 
 ---
 
